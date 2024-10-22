@@ -1,102 +1,86 @@
+.container {
+  width: 100%;
+  height: 500%;
+  /* background: pink; */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  scroll-behavior: smooth;
+  overflow: hidden;
+}
 
+.big-part {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(52, 36, 36);
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+  overflow-y: auto;
+}
 
+.small-part {
+  width: 300px;
+  height: 500px;
+  background: rgb(145, 78, 78);
 
- .container {
-    width: 100%;
-    height: 500%;
-    /* background: pink; */
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    scroll-behavior: smooth;
-    overflow: hidden;
+  /* will-change: opacity, transform; */
+  /* opacity: 1; */
+  aspect-ratio: 4 / var(--h, 30);
+}
 
-  }
-  
-  .big-part {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    /* background: rgb(52, 36, 36); */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 60px;
-    align-items: center;
-    /* overflow-y: auto; */
-    padding-top: 40px;
-    overflow: hidden;
+.small-part:hover {
+  opacity: 1;
+}
 
-    
-  }
-  
-  .small-part {
-    width: 300px;
-    height: 500px;
-    background: rgb(145, 78, 78);
-   
-    /* will-change: opacity, transform; */
-    /* opacity: 0.5; */
-    /* aspect-ratio: 4 / var(--h, 10); */
+.big-part:not(:nth-of-type(1)) {
+  animation: scale 1s both;
+  animation-timeline: scroll(root);
+}
+.big-part:not(:nth-of-type(2)) {
+  animation: scale 1s both;
+  animation-timeline: scroll(root);
+}
+.big-part:not(:nth-of-type(3)) {
+  animation: scale 1s both;
+  animation-timeline: scroll(root);
+}
+.big-part:not(:nth-of-type(4)) {
+  animation: scale 1s both;
+  animation-timeline: scroll(root);
+}
 
+.big-part:is(:nth-of-type(1)) {
+  --origin: calc(var(--gap) * -10);
+  --destination: calc(var(--card-height) * 1.5 + var(--gap));
+}
+.big-part:is(:nth-of-type(3)) {
+  --origin: calc(var(--gap) * -10);
+  --destination: calc(var(--card-height) * 1.5 + var(--gap));
+}
+.big-part:is(:nth-of-type(2)) {
+  --origin: calc(var(--gap) * -20);
+  --destination: calc(var(--card-height) * 3.4 + var(--gap));
+}
+.big-part:is(:nth-of-type(4)) {
+  --origin: calc(var(--gap) * -40);
+  --destination: calc(var(--card-height) * 3.4 + var(--gap));
+}
 
+@keyframes scale {
+  0% {
+    transform: translateY(var(--origin, 0%));
   }
-  
-  .small-part:hover {
-    opacity: 1;
+  50% {
   }
+  100% {
+    transform: translateY(var(--destination, 50%));
+  }
+}
 
-  
-  .big-part:not(:nth-of-type(1)){
-    animation: scale 1s linear both;
-    animation-timeline: scroll(root);
-  }
-  .big-part:not(:nth-of-type(2)){
-    animation: scale 1s linear both;
-    animation-timeline: scroll(root);
-  }
-  .big-part:not(:nth-of-type(3)){
-    animation: scale 1s linear both;
-    animation-timeline: scroll(root);
-  }
-  .big-part:not(:nth-of-type(4)){
-    animation: scale 1s linear both;
-    animation-timeline: scroll(root);
-  }
-  
- 
-
-  .big-part:is(:nth-of-type(1)) {
-    --origin: calc(var(--gap) * -1);
-    --destination: calc(var(--card-height) * 1.5 + var(--gap));
-  }
-  .big-part:is(:nth-of-type(3)) {
-    --origin: calc(var(--gap) * -1);
-    --destination: calc(var(--card-height) * 1.5 + var(--gap));
-  }
-  .big-part:is(:nth-of-type(2)) {
-    --origin: calc(var(--gap) * -2);
-    --destination: calc(var(--card-height) * 3.4 + var(--gap));
-  }
-  .big-part:is(:nth-of-type(4)) {
-    --origin: calc(var(--gap) * -2);
-    --destination: calc(var(--card-height) * 3.4 + var(--gap));
-  }
-  
-  @keyframes scale {
-    0% {
-      transform: translateY(var(--origin, 0%));
-    }
-    50% {
-
-    }
-    100% {
-      transform: translateY(var(--destination, 50%));
-
-    }
-  }
- 
 .part1{
   padding-top: 200px;
   padding-bottom: 100px;
@@ -121,11 +105,22 @@
   scroll-behavior: smooth;
 }
 
-.part2 .small-part:hover, 
+.part2 .small-part:hover,
 .part4 .small-part:hover {
   transform: rotate(-2deg);
 }
-.part1 .small-part:hover, 
+.part1 .small-part:hover,
 .part3 .small-part:hover {
   transform: rotate(2deg);
+}
+
+.tst {
+  width: 100%;
+  height: 100%;
+  background: rgba(65, 63, 63, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:60px;
 }
