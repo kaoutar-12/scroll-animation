@@ -59,9 +59,7 @@ const Slider = () => {
             ease: "none",
             scrollTrigger: {
               trigger: part,
-              start: "center bottom",
-              end: "center top",
-              scrub: true,
+
             },
           });
         });
@@ -69,11 +67,12 @@ const Slider = () => {
     });
   }, []);
 
+  
   return (
     <div className="container">
       {bigParts.map((_, bigIndex) => (
         <ul
-        className={`big-part part${bigIndex }`}
+        className={`big-part part${bigIndex + 1}` }
           key={bigIndex}
           ref={(el) => (bigPartRefs.current[bigIndex] = el)}
         >

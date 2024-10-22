@@ -38,7 +38,6 @@ overflow-y: hidden;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
-    scroll-behavior: smooth;
   }
   
   .big-part {
@@ -68,23 +67,22 @@ overflow-y: hidden;
   }
   
   .container .big-part.part1 {
-    --webkit-scroll-speed-mode: var(--webkit-scroll-speed);
-    --webkit-scroll-speed: 250;
+    scroll-behavior: smooth;
+    sc
     
   }
   
   .container .big-part.part2 {
+    scroll-behavior: auto;
     
-    transform: translateZ(-0.5px) ; /* Move at a medium speed */
   }
   
   .container .big-part.part3 {
     
-    transform: translateY(-150px) ; /* Move slower */
-    
+   
   }
   
   .container .big-part.part4 {
 
-    transform: translateZ(0.5px) ; /* Move faster */
+    
   }
