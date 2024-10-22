@@ -89,11 +89,11 @@
       transform: translateY(var(--origin, 0%));
     }
     50% {
-      filter: grayscale(1);
+
     }
     100% {
       transform: translateY(var(--destination, 50%));
-      filter: grayscale(1);
+
     }
   }
  
