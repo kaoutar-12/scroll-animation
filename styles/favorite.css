@@ -1,0 +1,8 @@
+.fav{
+    width: 500px;
+    height: 150px;
+    background: goldenrod;
+    position: fixed;
+    bottom: 0;
+    right: 700px;
+}
