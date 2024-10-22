@@ -1,0 +1,90 @@
+/* .container {
+  width: 100%;
+  height: 500%;
+  background: pink;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.big-part {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(52, 36, 36);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  align-items: center;
+overflow-y: hidden;
+}
+
+.small-part {
+  width: 300px;
+  height: 500px;
+  background: rgb(145, 78, 78);
+
+}
+ */
+
+
+
+ .container {
+    width: 100%;
+    height: 500%;
+    background: pink;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    scroll-behavior: smooth;
+  }
+  
+  .big-part {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(52, 36, 36);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    overflow-y: auto;
+    position: relative;
+  }
+  
+  .small-part {
+    width: 300px;
+    height: 500px;
+    background: rgb(145, 78, 78);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+  
+  .small-part:hover {
+    opacity: 1;
+  }
+  
+  .container .big-part.part1 {
+    --webkit-scroll-speed-mode: var(--webkit-scroll-speed);
+    --webkit-scroll-speed: 250;
+    
+  }
+  
+  .container .big-part.part2 {
+    
+    transform: translateZ(-0.5px) ; /* Move at a medium speed */
+  }
+  
+  .container .big-part.part3 {
+    
+    transform: translateY(-150px) ; /* Move slower */
+    
+  }
+  
+  .container .big-part.part4 {
+
+    transform: translateZ(0.5px) ; /* Move faster */
+  }
