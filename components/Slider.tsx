@@ -1,14 +1,13 @@
-
-
 "use client";
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import ScrollToPlugin
 import "@/styles/slider.css";
 
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+// Register ScrollTrigger and ScrollToPlugin
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 interface smallPartsProps {
   smallParts: string[];
@@ -40,13 +39,16 @@ const Slider = () => {
           start: 0,
           end: "max",
           onLeave: (self) => {
-            self.scroll(1); // Scroll back to the top
+            gsap.to(window, { scrollTo: 1, duration: 0 }); // Scroll to the start
             ScrollTrigger.update();
           },
           onLeaveBack: (self) => {
-            self.scroll(ScrollTrigger.maxScroll(window) - 1); // Scroll back to the bottom
+            gsap.to(window, {
+              scrollTo: ScrollTrigger.maxScroll(window) - 1,
+              duration: 0, // Instant scroll to the end
+            });
             ScrollTrigger.update();
-          }
+          },
         });
 
         // Animation for each small-part inside the big-part
@@ -54,12 +56,13 @@ const Slider = () => {
         smallParts.forEach((part) => {
           gsap.to(part, {
             opacity: 1,
-            repeat: 1,
+            repeat: -1,
+            duration: 1,
             yoyo: true,
             ease: "none",
             scrollTrigger: {
               trigger: part,
-
+              scrub: true,
             },
           });
         });
@@ -67,12 +70,11 @@ const Slider = () => {
     });
   }, []);
 
-  
   return (
     <div className="container">
       {bigParts.map((_, bigIndex) => (
         <ul
-        className={`big-part part${bigIndex + 1}` }
+          className={`big-part part${bigIndex + 1}`}
           key={bigIndex}
           ref={(el) => (bigPartRefs.current[bigIndex] = el)}
         >

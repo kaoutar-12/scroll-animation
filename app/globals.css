@@ -1,4 +1,19 @@
 body{
   margin: 0;
   background: black;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+:root {
+	--gap: 1rem;
+	--card-width: clamp(280px, 20vw, 100vw);
+	--card-aspect-ratio: 4 / 10;
+	--card-height: calc(var(--card-width) * (10 / 4));
+}
+
+*,
+*:after,
+*:before {
+	box-sizing: border-box;
 }
