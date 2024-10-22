@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import ScrollToPlugin
 import "@/styles/slider.css";
 import Navbar from "../components/Navbar";
-
+import ScrollingMenu from "../components/ScrollingMenu"; // Import the ScrollingMenu component
 
 // Register ScrollTrigger and ScrollToPlugin
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -74,7 +74,6 @@ const Slider = () => {
 
   return (
     <div className="container">
-
       {bigParts.map((_, bigIndex) => (
         <ul
           className={`big-part part${bigIndex + 1}`}
@@ -84,6 +83,8 @@ const Slider = () => {
           <Tst smallParts={smallParts} />
         </ul>
       ))}
+      {/* Include the ScrollingMenu component here */}
+      <ScrollingMenu />
     </div>
   );
 };
