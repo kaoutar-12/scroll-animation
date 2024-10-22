@@ -4,7 +4,7 @@
  .container {
     width: 100%;
     height: 500%;
-    background: pink;
+    /* background: pink; */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -18,11 +18,11 @@
     padding: 0;
     width: 100%;
     height: 100%;
-    background: rgb(52, 36, 36);
+    /* background: rgb(52, 36, 36); */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 60px;
     align-items: center;
     /* overflow-y: auto; */
     padding-top: 40px;
@@ -38,15 +38,15 @@
    
     /* will-change: opacity, transform; */
     /* opacity: 0.5; */
-    aspect-ratio: 4 / var(--h, 10);
+    /* aspect-ratio: 4 / var(--h, 10); */
 
 
   }
   
   .small-part:hover {
     opacity: 1;
-
   }
+
   
   .big-part:not(:nth-of-type(1)){
     animation: scale 1s linear both;
@@ -119,4 +119,13 @@
   padding-top: 300px;
   padding-bottom: 100px;
   scroll-behavior: smooth;
+}
+
+.part2 .small-part:hover, 
+.part4 .small-part:hover {
+  transform: rotate(-2deg);
+}
+.part1 .small-part:hover, 
+.part3 .small-part:hover {
+  transform: rotate(2deg);
 }

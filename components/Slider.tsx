@@ -5,6 +5,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import ScrollToPlugin
 import "@/styles/slider.css";
+import Navbar from "../components/Navbar";
+
 
 // Register ScrollTrigger and ScrollToPlugin
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -72,6 +74,7 @@ const Slider = () => {
 
   return (
     <div className="container">
+
       {bigParts.map((_, bigIndex) => (
         <ul
           className={`big-part part${bigIndex + 1}`}

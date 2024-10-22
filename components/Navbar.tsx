@@ -5,7 +5,7 @@ import { FaHeart } from "react-icons/fa";
 
 const Navbar = () => {
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <div className="logo">
         <span>CineVerse</span>
       </div>
@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className="list">
         <FaHeart className="icon-list" />
       </div>
-    </div>
+    </nav>
   );
 };
 
