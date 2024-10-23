@@ -1,111 +1,110 @@
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+.favorite {
+    width: 580px;
+    height: 130px;
+    border-radius: 10px;
+    background: pink;
+    display: flex;
+    transition: all 0.4s ease;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+  }
+  
 
-.fav {
-  width: 600px;
-  height: 180px;
-  background: goldenrod;
-  position: fixed;
-  bottom: 5px;
-  right: 410px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 15px;
-}
-.text {
+  .favorite.expanded {
+    width: 900px; 
+    height: 500px; 
+    background: lightcoral; 
+    position: fixed;
+    bottom: 0;
+  }
+  
+  /* Keep existing styles */
+  .fav {
+    width: 600px;
+    height: 180px;
+    background: goldenrod;
+    position: fixed;
+    bottom: 5px;
+    right: 410px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .text {
     font-family: "Oswald", sans-serif;
     font-weight: 600;
     font-size: medium;
-}
-
-.fav hr {
+  }
+  .fav hr {
     width: 50px;
     border: none;
     border-top: 5px solid black;
     border-radius: 10px;
     transition: all 0.4s ease;
-}
-.favorite:hover {
+  }
+  .favorite:hover {
     background: rgb(57, 57, 55);
-    width: 600px;
-}
-.favorite:hover hr {
+  }
+  .favorite:hover hr {
     width: 60px;
-}
-
-.favorite {
-    width: 580px;
-    height: 130px;
+  }
+  .col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+  }
+  .list-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  .list {
+    width: 500px;
+    height: 100px;
+    gap: 5px;
+  }
+  .liked {
+    width: 70px;
+    height: 100px;
+    position: relative;
+    perspective: 1000px;
+    border: solid 2px red;
     border-radius: 10px;
-  background: pink;
-  display: flex;
-  transition: all 0.4s ease;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-}
-
-.col {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2px;
-}
-.list-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.list {
-  width: 500px;
-  height: 100px;
-  gap: 5px;
-}
-
-.liked {
-  width: 70px;
-  height: 100px;
-  position: relative;
-  perspective: 1000px;
-  border: solid 2px red;
-  border-radius: 10px;
-}
-
-.card-front,
-.card-back {
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  position: absolute;
-  backface-visibility: hidden;
-  transition: transform 0.8s;
-}
-
-.card-front {
-  background-color: lightblue;
-}
-
-.card-back {
-  background-color: coral;
-  transform: rotateY(180deg);
-}
-
-.liked:hover .card-front {
-  transform: rotateY(180deg);
-}
-
-.liked:hover .card-back {
-  transform: rotateY(360deg);
-}
-
-.expand {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  }
+  .card-front,
+  .card-back {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    position: absolute;
+    backface-visibility: hidden;
+    transition: transform 0.8s;
+  }
+  .card-front {
+    background-color: lightblue;
+  }
+  .card-back {
+    background-color: coral;
+    transform: rotateY(180deg);
+  }
+  .liked:hover .card-front {
+    transform: rotateY(180deg);
+  }
+  .liked:hover .card-back {
+    transform: rotateY(360deg);
+  }
+  .expand {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  
