@@ -15,9 +15,7 @@ const Navbar = () => {
           <CgSearch className="icon" />
         </div>
       </div>
-      <div className="list">
-        <FaHeart className="icon-list" />
-      </div>
+ 
     </nav>
   );
 };
