@@ -5,7 +5,16 @@ type Props = {}
 
 const Favorite = (props: Props) => {
   return (
-    <div className="fav"></div>
+    <div className="fav">
+      <div className="liked">
+        
+      </div>
+      <div className="liked"></div>
+      <div className="liked"></div>
+      <div className="liked"></div>
+      <div className="liked"></div>
+      <div className="liked"></div>
+    </div>
   )
 }
 

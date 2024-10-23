@@ -6,7 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import ScrollToPlugin
 import "@/styles/slider.css";
 import Navbar from "../components/Navbar";
-import ScrollingMenu from "../components/ScrollingMenu"; // Import the ScrollingMenu component
 
 // Register ScrollTrigger and ScrollToPlugin
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -19,15 +18,16 @@ const Tst: React.FC<smallPartsProps> = ({ smallParts }) => {
   return (
     <>
       {smallParts.map((_, smallIndex) => (
-        <li className="small-part" key={smallIndex}></li>
+        <li className="small-part" key={smallIndex}>
+        </li>
       ))}
     </>
   );
 };
 
 const Slider = () => {
-  const bigParts = Array(4).fill(null);
-  const smallParts = Array(20).fill(null);
+  const bigParts = Array(5).fill(null);
+  const smallParts = Array(25).fill(null);
 
   // Use refs to keep track of big parts for ScrollTrigger animations
   const bigPartRefs = useRef<Array<HTMLUListElement | null>>([]);
@@ -81,10 +81,10 @@ const Slider = () => {
           ref={(el) => (bigPartRefs.current[bigIndex] = el)}
         >
           <Tst smallParts={smallParts} />
+          <Tst smallParts={smallParts} />
         </ul>
       ))}
       {/* Include the ScrollingMenu component here */}
-      <ScrollingMenu />
     </div>
   );
 };

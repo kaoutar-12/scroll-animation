@@ -3,11 +3,12 @@
   height: 500%;
   /* background: pink; */
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
-  scroll-behavior: smooth;
-  overflow: hidden;
+
+  /* overflow: hidden; */
 }
+
 
 .big-part {
   margin: 0;
@@ -25,11 +26,11 @@
 .small-part {
   width: 300px;
   height: 500px;
-  background: rgb(145, 78, 78);
+  background: rgb(206, 6, 6);
 
   /* will-change: opacity, transform; */
   /* opacity: 1; */
-  aspect-ratio: 4 / var(--h, 30);
+  aspect-ratio: 5 / var(--h, 30);
 }
 
 .small-part:hover {
@@ -52,20 +53,28 @@
   animation: scale 1s both;
   animation-timeline: scroll(root);
 }
+.big-part:not(:nth-of-type(5)) {
+  animation: scale 1s both;
+  animation-timeline: scroll(root);
+}
 
 .big-part:is(:nth-of-type(1)) {
   --origin: calc(var(--gap) * -10);
   --destination: calc(var(--card-height) * 1.5 + var(--gap));
 }
-.big-part:is(:nth-of-type(3)) {
+/* .big-part:is(:nth-of-type(3)) {
   --origin: calc(var(--gap) * -10);
   --destination: calc(var(--card-height) * 1.5 + var(--gap));
-}
+} */
 .big-part:is(:nth-of-type(2)) {
   --origin: calc(var(--gap) * -20);
   --destination: calc(var(--card-height) * 3.4 + var(--gap));
 }
 .big-part:is(:nth-of-type(4)) {
+  --origin: calc(var(--gap) * -40);
+  --destination: calc(var(--card-height) * 3.4 + var(--gap));
+}
+.big-part:is(:nth-of-type(5)) {
   --origin: calc(var(--gap) * -40);
   --destination: calc(var(--card-height) * 3.4 + var(--gap));
 }

@@ -1,8 +1,20 @@
 .fav{
-    width: 500px;
-    height: 150px;
+    width: 800px;
+    height: 170px;
     background: goldenrod;
     position: fixed;
     bottom: 0;
-    right: 700px;
+    right: 320px;
+    border-top-left-radius: 60px;
+    border-top-right-radius: 60px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.liked{
+    width: 90px;
+    height: 130px;
+    background: grey;
+    border-radius: 10px;
 }
