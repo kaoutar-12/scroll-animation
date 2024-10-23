@@ -1,21 +1,39 @@
-import React from 'react';
+import React from "react";
 import "@/styles/favorite.css";
+import { TbLayoutBottombarExpand } from "react-icons/tb";
 
-type Props = {}
+type Props = {};
 
-const Favorite = (props: Props) => {
-  const likedItems = Array(6).fill(null); // Create an array with 6 items
-
+const One = () => {
+  const likedItems = Array(7).fill(null); // Create an array with 6 items
   return (
-    <div className="fav">
-      {likedItems.map((_, index) => (
-        <div key={index} className="liked">
-          <div className="card-front" id="front-${index}">Front {index + 1}</div>
-          <div className="card-back">Back {index + 1}</div>
-        </div>
-      ))}
+    <div className="list-wrapper">
+      <div className="list">
+        {likedItems.map((_, index) => (
+          <div key={index} className="liked">
+            <div className="card-front" id="front-${index}"></div>
+            <div className="card-back"></div>
+          </div>
+        ))}
+      </div>
+      <TbLayoutBottombarExpand className="expand" />
     </div>
   );
-}
+};
+
+const Favorite = (props: Props) => {
+  const likedItemsCount = 7;
+  return (
+    <div className="fav">
+      <div className="text">YOU HAVE {likedItemsCount} CHOICES</div>
+      <div className="favorite">
+        <div className="col">
+          <hr />
+          <One />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Favorite;
