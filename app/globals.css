@@ -2,7 +2,7 @@
 
 body{
   margin: 0;
-  background: black;
+  background: rgba(90, 0, 60, 1);
   overflow-x: hidden;
   scroll-behavior: smooth;
   position: relative;

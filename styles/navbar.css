@@ -18,8 +18,8 @@
   height: 100%;
   /* background: pink; */
   font-family: pacifico;
-  color: white;
-  font-size: 23px;
+  color: #a0dcff;
+  font-size: 33px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +37,7 @@
 .search-inside {
   width: 100%;
   height: 50%;
-  background: rgba(65, 63, 63, 0.8);
+  background: #a0dcff84;
   display: flex;
   justify-content: center;
   align-items: center;
