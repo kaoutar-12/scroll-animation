@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import ScrollToPlugin
 import "@/styles/slider.css";
 import Navbar from "../components/Navbar";
+import Card from "./Card";
 
 // Register ScrollTrigger and ScrollToPlugin
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -19,6 +20,7 @@ const Tst: React.FC<smallPartsProps> = ({ smallParts }) => {
     <>
       {smallParts.map((_, smallIndex) => (
         <li className="small-part" key={smallIndex}>
+          <Card/>
         </li>
       ))}
     </>
