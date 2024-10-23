@@ -49,9 +49,13 @@
   height: 60%;
   border: none;
   background: transparent;
+  font-family: 'Bebas neue';
+  font-size: 20px;
 }
-input::placeholder {
+.search-inside input::placeholder {
   color: rgb(68, 67, 67);
+  font-size: 20px;
+
 }
 .search-inside input:focus {
   outline: none;

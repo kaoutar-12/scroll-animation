@@ -1,0 +1,58 @@
+.wrapper {
+    width: 90%;
+    /* height: 400px; */
+    /* background: pink; */
+    display: flex;
+    align-items: center;
+    /* border: solid 1px red; */
+      overflow: hidden;
+      overflow-x: scroll;
+      padding-bottom: 20px;
+      padding-top: 20px;
+  }
+  
+  
+  .wrapper::-webkit-scrollbar {
+    width: 10px;
+    background: #16181d;
+  }
+  
+  .wrapper::-webkit-scrollbar-thumb {
+    background: #E3646E;
+  }
+  
+  
+  
+  
+  .container {
+    height: 400px;
+    display: flex;
+    flex-wrap: nowrap;
+    /* border: solid 1px black; */
+  }
+  .card {
+    width: 250px;
+    /* height: 100px; */
+    background: #223;
+    border-radius: 30px;
+    cursor: pointer;
+    background-size: cover;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    transition: 0.6s cubic-bezier(0.28, -0.03, 0, 0.99);
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.8);
+    margin: 0 10px;
+  }
+  
+  input {
+    display: none;
+  }
+  
+  input:checked + label {
+    width: 600px;
+  }
+  input:checked + label .discription {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
