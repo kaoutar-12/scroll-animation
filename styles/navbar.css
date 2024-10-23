@@ -5,13 +5,14 @@
   height: 80px;
 
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10000;
   gap: 300px;
+  padding-left: 30px;
 }
 .logo {
   width: 100px;
@@ -32,6 +33,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-right: 30px;
 }
 
 .search-inside {
@@ -51,9 +53,16 @@
   background: transparent;
   font-family: 'Bebas neue';
   font-size: 20px;
+  color: rgba(90, 0, 60, 1);
+}
+@media screen and (min-width: 1444px) {
+  .search-inside input{
+    width: 90%;
+  }
+  
 }
 .search-inside input::placeholder {
-  color: rgb(68, 67, 67);
+  color: rgba(90, 0, 60, 1);
   font-size: 20px;
 
 }
@@ -64,17 +73,17 @@
 .search-inside:hover .icon,
 .search-inside input:hover ~ .icon,
 .search-inside input:focus ~ .icon {
-  color: black;
+  color: rgba(90, 0, 60, 1);
 }
 
 .search-inside:hover {
-  background: white;
+  background: #a0dcff;
 }
 
 .icon {
   width: 20px;
   height: 20px;
-  color: white;
+  color: rgba(90, 0, 60, 1);
 }
 
 .list {

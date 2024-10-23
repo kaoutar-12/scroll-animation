@@ -36,6 +36,14 @@
    border-radius: 30px;
 }
 
+@media screen and (min-width: 1444px) {
+  .small-part {
+    height: 900px;
+  }
+  
+}
+
+
 .small-part:hover {
   opacity: 1;
 }
