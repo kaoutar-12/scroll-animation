@@ -5,7 +5,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import ScrollToPlugin
 import "@/styles/slider.css";
-import Navbar from "../components/Navbar";
 import Card from "./Card";
 
 // Register ScrollTrigger and ScrollToPlugin
@@ -36,17 +35,17 @@ const Slider = () => {
 
   useEffect(() => {
     // Infinite scroll logic for each big part
-    bigPartRefs.current.forEach((bigPart, index) => {
+    bigPartRefs.current.forEach((bigPart) => {
       if (bigPart) {
         ScrollTrigger.create({
           trigger: bigPart,
           start: 0,
           end: "max",
-          onLeave: (self) => {
+          onLeave: () => {
             gsap.to(window, { scrollTo: 1, duration: 0 }); // Scroll to the start
             ScrollTrigger.update();
           },
-          onLeaveBack: (self) => {
+          onLeaveBack: () => {
             gsap.to(window, {
               scrollTo: ScrollTrigger.maxScroll(window) - 1,
               duration: 0, // Instant scroll to the end
@@ -80,7 +79,7 @@ const Slider = () => {
         <ul
           className={`big-part part${bigIndex + 1}`}
           key={bigIndex}
-          ref={(el) => (bigPartRefs.current[bigIndex] = el)}
+          ref={(el) => { bigPartRefs.current[bigIndex] = el; }}
         >
           <Tst smallParts={smallParts} />
           <Tst smallParts={smallParts} />

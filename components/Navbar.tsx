@@ -1,7 +1,6 @@
 import React from "react";
 import "../styles/navbar.css";
 import { CgSearch } from "react-icons/cg";
-import { FaHeart } from "react-icons/fa";
 
 const Navbar = () => {
   return (

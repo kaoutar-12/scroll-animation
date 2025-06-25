@@ -5,13 +5,13 @@ import { TbLayoutBottombarExpand } from "react-icons/tb";
 
 const BigCards = () => {
   const cards = Array(7).fill(null);
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
-  const handleCardClick = (index) => {
+  const handleCardClick = (index: number) => {
     setSelectedCard(index === selectedCard ? null : index); // Toggle expansion
   };
 
-  const handleDotClick = (index) => {
+  const handleDotClick = (index: number) => {
     setSelectedCard(index); // Select the card linked to the dot
   };
 
