@@ -1,140 +1,39 @@
 .container {
-  /* width: 100%;
-  height: 500%; */
-  /* background: pink; */
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 20px;
- 
-  /* overflow: hidden; */
+  padding: 60px;
+  overflow: hidden;
 }
 
-
-.big-part {
-  margin: 0;
-  padding: 0;
-
-  /* background: rgb(52, 36, 36); */
+/* Each column of movies */
+.column {
   display: flex;
   flex-direction: column;
-  gap: 60px;
-  align-items: center;
-  overflow-y: auto;
+  gap: 20px;
+  animation: scrollLoop 400s linear infinite;
 }
 
+/* Movie card wrapper */
 .small-part {
   width: 100%;
-  height: 500px;
-  /* background: rgb(206, 6, 6); */
-
-  /* will-change: opacity, transform; */
-  /* opacity: 1; */
-  aspect-ratio: 5 / var(--h, 25);
   display: flex;
-   justify-content: center;
-   align-items: center;
-   border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
 }
-
-@media screen and (min-width: 1444px) {
-  .small-part {
-    height: 900px;
-  }
-  
-}
-
 
 .small-part:hover {
-  opacity: 1;
+  transform: scale(1.03) rotate(0.5deg);
 }
 
-.big-part:not(:nth-of-type(1)) {
-  animation: scale 1s both;
-  animation-timeline: scroll(root);
-}
-.big-part:not(:nth-of-type(2)) {
-  animation: scale 1s both;
-  animation-timeline: scroll(root);
-}
-.big-part:not(:nth-of-type(3)) {
-  animation: scale 1s both;
-  animation-timeline: scroll(root);
-}
-.big-part:not(:nth-of-type(4)) {
-  animation: scale 1s both;
-  animation-timeline: scroll(root);
-}
-.big-part:not(:nth-of-type(5)) {
-  animation: scale 1s both;
-  animation-timeline: scroll(root);
+/* Optional: if you want alternating direction scroll */
+.column:nth-child(even) {
+  animation-direction: reverse;
 }
 
-.big-part:is(:nth-of-type(1)) {
-  --origin: calc(var(--gap) * -10);
-  --destination: calc(var(--card-height) * 0.5 + var(--gap));
-}
-/* .big-part:is(:nth-of-type(3)) {
-  --origin: calc(var(--gap) * -10);
-  --destination: calc(var(--card-height) * 1.5 + var(--gap));
-} */
-.big-part:is(:nth-of-type(2)) {
-  --origin: calc(var(--gap) * -20);
-  --destination: calc(var(--card-height) * 5.4 + var(--gap));
-}
-.big-part:is(:nth-of-type(4)) {
-  --origin: calc(var(--gap) * -40);
-  --destination: calc(var(--card-height) * 7.4 + var(--gap));
-}
-.big-part:is(:nth-of-type(5)) {
-  --origin: calc(var(--gap) * -40);
-  --destination: calc(var(--card-height) * 1.4 + var(--gap));
-}
-
-@keyframes scale {
-  0% {
-    transform: translateY(var(--origin, 0%));
-  }
-  50% {
-  }
-  100% {
-    transform: translateY(var(--destination, 50%));
-  }
-}
-
-.part1{
-  padding-top: 200px;
-  padding-bottom: 100px;
-  scroll-behavior: smooth;
-}
-
-.part2{
-  padding-top: 300px;
-  padding-bottom: 100px;
-  scroll-behavior: smooth;
-}
-
-.part3{
-  padding-top: 200px;
-  padding-bottom: 100px;
-  scroll-behavior: smooth;
-}
-
-.part4{
-  padding-top: 300px;
-  padding-bottom: 100px;
-  scroll-behavior: smooth;
-}
-
-.part2 .small-part:hover,
-.part4 .small-part:hover {
-  transform: rotate(-0.5deg);
-}
-.part1 .small-part:hover,
-.part3 .small-part:hover,
-.part5 .small-part:hover {
-  transform: rotate(0.5deg);
-}
-
+/* Background container if needed */
 .tst {
   width: 100%;
   height: 100%;
@@ -143,5 +42,38 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap:60px;
+  gap: 60px;
+}
+
+/* Smooth vertical loop animation */
+@keyframes scrollLoop {
+  0% {
+    transform: translateY(0%);
+  }
+  50% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(-70%);
+  }
+}
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
 }

@@ -1,91 +1,103 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin"; // Import ScrollToPlugin
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import "@/styles/slider.css";
 import Card from "./Card";
 
-// Register ScrollTrigger and ScrollToPlugin
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-interface smallPartsProps {
-  smallParts: string[];
-}
-
-const Tst: React.FC<smallPartsProps> = ({ smallParts }) => {
-  return (
-    <>
-      {smallParts.map((_, smallIndex) => (
-        <li className="small-part" key={smallIndex}>
-          <Card/>
-        </li>
-      ))}
-    </>
-  );
+export type MovieResult = {
+  id: number;
+  title: string;
+  poster_path: string;
 };
 
-const Slider = () => {
-  const bigParts = Array(5).fill(null);
-  const smallParts = Array(25).fill(null);
+export type MovieApiResponse = {
+  page: number;
+  results: MovieResult[];
+  total_pages: number;
+  total_results: number;
+};
 
-  // Use refs to keep track of big parts for ScrollTrigger animations
-  const bigPartRefs = useRef<Array<HTMLUListElement | null>>([]);
+const columns = 5;
+const rowsPerColumn = 87;
+const totalItems = columns * rowsPerColumn; // 125
+
+const Slider = () => {
+  const [data, setData] = useState<MovieResult[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const getData = async () => {
+    try {
+      const response = await axios.get<MovieApiResponse>(
+        "https://api.themoviedb.org/3/trending/all/day?language=en-US",
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+          },
+        }
+      );
+      // Fill in data if fewer than needed
+      const repeated = Array.from({ length: totalItems }, (_, i) => {
+        return response.data.results[i % response.data.results.length];
+      });
+      setData(repeated);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
 
   useEffect(() => {
-    // Infinite scroll logic for each big part
-    bigPartRefs.current.forEach((bigPart) => {
-      if (bigPart) {
-        ScrollTrigger.create({
-          trigger: bigPart,
-          start: 0,
-          end: "max",
-          onLeave: () => {
-            gsap.to(window, { scrollTo: 1, duration: 0 }); // Scroll to the start
-            ScrollTrigger.update();
-          },
-          onLeaveBack: () => {
-            gsap.to(window, {
-              scrollTo: ScrollTrigger.maxScroll(window) - 1,
-              duration: 0, // Instant scroll to the end
-            });
-            ScrollTrigger.update();
-          },
-        });
-
-        // Animation for each small-part inside the big-part
-        const smallParts = bigPart.querySelectorAll(".small-part");
-        smallParts.forEach((part) => {
-          gsap.to(part, {
-            opacity: 1,
-            repeat: -1,
-            duration: 1,
-            yoyo: true,
-            ease: "none",
-            scrollTrigger: {
-              trigger: part,
-              scrub: true,
-            },
-          });
-        });
-      }
-    });
+    getData();
   }, []);
 
+  useEffect(() => {
+    if (!data.length) return;
+
+    const scrollEl = window;
+
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      onUpdate: () => {
+        const max = ScrollTrigger.maxScroll(scrollEl);
+        const y = window.scrollY;
+
+        if (y >= max - 1) {
+          gsap.to(scrollEl, { scrollTo: max / 2 + 1, duration: 0 });
+        } else if (y <= 0) {
+          gsap.to(scrollEl, { scrollTo: max / 2 - 1, duration: 0 });
+        }
+      },
+    });
+
+    return () => {
+      trigger.kill();
+    };
+  }, [data]);
+
+  // Split movies into columns
+  const columnsData = Array.from({ length: columns }, (_, colIndex) =>
+    data.slice(colIndex * rowsPerColumn, (colIndex + 1) * rowsPerColumn)
+  );
+
   return (
-    <div className="container">
-      {bigParts.map((_, bigIndex) => (
-        <ul
-          className={`big-part part${bigIndex + 1}`}
-          key={bigIndex}
-          ref={(el) => { bigPartRefs.current[bigIndex] = el; }}
-        >
-          <Tst smallParts={smallParts} />
-          <Tst smallParts={smallParts} />
+    <div className="container" ref={containerRef}>
+      {columnsData.map((column, colIndex) => (
+        <ul key={colIndex} className="column">
+          {column.map((movie) => (
+            <li key={movie.id} className="small-part">
+              <Card movie={movie} />
+            </li>
+          ))}
         </ul>
       ))}
-      {/* Include the ScrollingMenu component here */}
     </div>
   );
 };
