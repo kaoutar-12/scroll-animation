@@ -63,6 +63,8 @@ const Slider = () => {
     getData();
   }, []);
 
+  
+
   useEffect(() => {
   if (!data.length) return;
 

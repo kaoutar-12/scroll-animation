@@ -50,12 +50,12 @@
 /* Animations */
 @keyframes scroll1 {
   0% { transform: translateY(0); }
-  100% { transform: translateY(-200px); }
+  100% { transform: translateY(-350px); }
   
 }
 
 @keyframes scroll2 {
-  0% { transform: translateY(0); }
+  0% { transform: translateY(-150px); }
   100% { transform: translateY(-300px); }
 }
 
@@ -65,7 +65,7 @@
 }
 
 @keyframes scroll4 {
-  0% { transform: translateY(0); }
+  0% { transform: translateY(-190px); }
   100% { transform: translateY(-500px); }
 }
 
