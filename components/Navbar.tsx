@@ -3,7 +3,8 @@ import React from "react";
 import "../styles/navbar.css";
 import { CgSearch } from "react-icons/cg";
 
-const Navbar = () => {
+const Navbar = ({setClicked}: {setClicked:(val:boolean)=> void}) => {
+  const handleClick = () => setClicked(true);
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.trim();
 
@@ -28,6 +29,7 @@ const Navbar = () => {
     }
   };
 
+
   return (
     <nav className="navbar">
       <div className="logo">
@@ -35,7 +37,12 @@ const Navbar = () => {
       </div>
       <div className="search">
         <div className="search-inside">
-          <input type="text" placeholder="Search" onChange={handleSearch} />
+          <input
+            type="text"
+            placeholder="Search"
+            onChange={handleSearch}
+            onClick={handleClick}
+          />
           <CgSearch className="icon" />
         </div>
       </div>

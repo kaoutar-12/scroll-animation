@@ -5,13 +5,13 @@
   height: 80px;
 
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10000;
-  gap: 300px;
+  gap: 500px;
   padding-left: 30px;
 }
 .logo {

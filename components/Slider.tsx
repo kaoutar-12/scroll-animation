@@ -27,7 +27,7 @@ const columns = 5;
 const moviesPerColumn = 100;
 const totalMovies = columns * moviesPerColumn; // 500
 
-const Slider = () => {
+const Slider = ({ clicked }: { clicked: boolean }) => {
   const [data, setData] = useState<MovieResult[][]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +36,9 @@ const Slider = () => {
       const totalPagesToFetch = Math.ceil(totalMovies / 20); // TMDb returns 20 per page
       const requests = Array.from({ length: totalPagesToFetch }, (_, i) =>
         axios.get<MovieApiResponse>(
-          `https://api.themoviedb.org/3/trending/all/day?language=en-US&page=${i + 1}`,
+          `https://api.themoviedb.org/3/trending/all/day?language=en-US&page=${
+            i + 1
+          }`,
           {
             headers: {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
@@ -63,46 +65,41 @@ const Slider = () => {
     getData();
   }, []);
 
-  
-
   useEffect(() => {
-  if (!data.length) return;
+    if (!data.length) return;
 
-  const triggers: ScrollTrigger[] = [];
+    const triggers: ScrollTrigger[] = [];
 
-  const columns = containerRef.current?.querySelectorAll(".column");
-  if (!columns) return;
+    const columns = containerRef.current?.querySelectorAll(".column");
+    if (!columns) return;
 
-  columns.forEach((col, index) => {
-    const speed = 1 + index * 2; // adjust multiplier for faster/slower
-    triggers.push(
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-        onUpdate: (self) => {
-          const y = self.scroll();
-          gsap.to(col, {
-            y: y * speed * 0.1, // tweak the multiplier to control speed
-            overwrite: true,
-            ease: "none",
-          });
-        },
-      })
-    );
-  });
+    columns.forEach((col) => {
+      // adjust multiplier for faster/slower
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+          onUpdate: () => {
+            gsap.to(col, {
+              overwrite: true,
+              ease: "none",
+            });
+          },
+        })
+      );
+    });
 
-  return () => {
-    triggers.forEach((t) => t.kill());
-  };
-}, [data]);
-
+    return () => {
+      triggers.forEach((t) => t.kill());
+    };
+  }, [data]);
 
   return (
-    <div className="container" ref={containerRef}>
+    <div className={clicked ? "container-clicked" : "container"} ref={containerRef}>
       {data.map((column, colIndex) => (
-        <ul key={colIndex} className="column">
+        <ul key={colIndex} className={clicked ? "column-clicked" : "column"}>
           {column.map((movie) => (
             <li key={movie.id} className="small-part">
               <Card movie={movie} />
