@@ -24,7 +24,7 @@ export type MovieApiResponse = {
 };
 
 const columns = 5;
-const moviesPerColumn = 10;
+const moviesPerColumn = 25;
 const totalMovies = columns * moviesPerColumn; // 500
 
 const Slider = ({ clicked }: { clicked: boolean }) => {
