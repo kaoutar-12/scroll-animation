@@ -65,47 +65,46 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     getData();
   }, []);
 
-useEffect(() => {
-  if (!data.length) return;
+  useEffect(() => {
+    if (!data.length) return;
 
-  const triggers: ScrollTrigger[] = [];
-  const columns = containerRef.current?.querySelectorAll(".column");
-  if (!columns) return;
+    const triggers: ScrollTrigger[] = [];
+    const columns = containerRef.current?.querySelectorAll(".column");
+    if (!columns) return;
 
-  columns.forEach((col) => {
-    const colHeight = col.scrollHeight;
-    // Duplicate content for seamless loop
-    col.innerHTML += col.innerHTML;
+    columns.forEach((col) => {
+      const colHeight = col.scrollHeight;
+      // Duplicate content for seamless loop
+      col.innerHTML += col.innerHTML;
 
-    triggers.push(
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: "top top",
-        end: `+=${colHeight}`,
-        scrub: true,
-        onUpdate: (self) => {
-          let scrollY = self.scroll();
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          start: "top top",
+          end: `+=${colHeight}`,
+          scrub: true,
+          onUpdate: (self) => {
+            let scrollY = self.scroll();
 
-          if (scrollY > colHeight) {
-            scrollY = scrollY % colHeight;
-            gsap.to(window, { scrollTo: scrollY, duration: 0 });
-          }
+            if (scrollY > colHeight) {
+              scrollY = scrollY % colHeight;
+              gsap.to(window, { scrollTo: scrollY, duration: 0 });
+            }
 
-          gsap.to(col, {
-            y: -scrollY,
-            ease: "none",
-            overwrite: true,
-          });
-        },
-      })
-    );
-  });
+            gsap.to(col, {
+              y: -scrollY,
+              ease: "none",
+              overwrite: true,
+            });
+          },
+        })
+      );
+    });
 
-  return () => {
-    triggers.forEach((t) => t.kill());
-  };
-}, [data]);
-
+    return () => {
+      triggers.forEach((t) => t.kill());
+    };
+  }, [data]);
 
   return (
     <div
@@ -114,11 +113,14 @@ useEffect(() => {
     >
       {data.map((column, colIndex) => (
         <ul key={colIndex} className={clicked ? "column-clicked" : "column"}>
-          {[...column, ...column].map((movie, i) => (
-            <li key={`${movie.id}-${i}`} className="small-part">
-              <Card movie={movie} />
-            </li>
-          ))}
+          {Array(10)
+            .fill(column)
+            .flat()
+            .map((movie, i) => (
+              <li key={`${movie.id}-${i}`} className="small-part">
+                <Card movie={movie} />
+              </li>
+            ))}
         </ul>
       ))}
     </div>
