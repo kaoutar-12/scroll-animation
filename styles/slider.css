@@ -24,6 +24,7 @@
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-fill-mode: forwards;
+  will-change: transform;
 }
 
 .column-clicked {
@@ -67,7 +68,7 @@
     transform: translateY(0);
   }
   100% {
-    transform: translateY(-350px);
+    transform: translateY(-50%);
   }
 }
 

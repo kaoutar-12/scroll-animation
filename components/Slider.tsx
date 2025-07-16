@@ -24,7 +24,7 @@ export type MovieApiResponse = {
 };
 
 const columns = 5;
-const moviesPerColumn = 100;
+const moviesPerColumn = 10;
 const totalMovies = columns * moviesPerColumn; // 500
 
 const Slider = ({ clicked }: { clicked: boolean }) => {
@@ -65,43 +65,57 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (!data.length) return;
+useEffect(() => {
+  if (!data.length) return;
 
-    const triggers: ScrollTrigger[] = [];
+  const triggers: ScrollTrigger[] = [];
+  const columns = containerRef.current?.querySelectorAll(".column");
+  if (!columns) return;
 
-    const columns = containerRef.current?.querySelectorAll(".column");
-    if (!columns) return;
+  columns.forEach((col) => {
+    const colHeight = col.scrollHeight;
+    // Duplicate content for seamless loop
+    col.innerHTML += col.innerHTML;
 
-    columns.forEach((col) => {
-      // adjust multiplier for faster/slower
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: true,
-          onUpdate: () => {
-            gsap.to(col, {
-              overwrite: true,
-              ease: "none",
-            });
-          },
-        })
-      );
-    });
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top top",
+        end: `+=${colHeight}`,
+        scrub: true,
+        onUpdate: (self) => {
+          let scrollY = self.scroll();
 
-    return () => {
-      triggers.forEach((t) => t.kill());
-    };
-  }, [data]);
+          if (scrollY > colHeight) {
+            scrollY = scrollY % colHeight;
+            gsap.to(window, { scrollTo: scrollY, duration: 0 });
+          }
+
+          gsap.to(col, {
+            y: -scrollY,
+            ease: "none",
+            overwrite: true,
+          });
+        },
+      })
+    );
+  });
+
+  return () => {
+    triggers.forEach((t) => t.kill());
+  };
+}, [data]);
+
 
   return (
-    <div className={clicked ? "container-clicked" : "container"} ref={containerRef}>
+    <div
+      className={clicked ? "container-clicked" : "container"}
+      ref={containerRef}
+    >
       {data.map((column, colIndex) => (
         <ul key={colIndex} className={clicked ? "column-clicked" : "column"}>
-          {column.map((movie) => (
-            <li key={movie.id} className="small-part">
+          {[...column, ...column].map((movie, i) => (
+            <li key={`${movie.id}-${i}`} className="small-part">
               <Card movie={movie} />
             </li>
           ))}
