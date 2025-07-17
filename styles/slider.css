@@ -6,17 +6,22 @@
 .container-clicked {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+
+
 }
 
 .column-clicked {
+  position: relative;
+  height: 100vh;
 }
 
 .small-part-clicked {
-}
+  position: absolute;
+  bottom: 0;
 
-.column-clicked ul {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  overflow-y: hidden;
 }
 
 .column {

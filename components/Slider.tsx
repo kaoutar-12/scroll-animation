@@ -39,9 +39,6 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
   const wrapHeightRef = useRef(0);
   const animationFrameId = useRef<number | null>(null);
 
-  // Wheel handler (now in correct scope)
-  // (Removed duplicate handleWheel declaration)
-
   // Fetch movies
   const getData = async () => {
     try {
@@ -84,9 +81,7 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
   }, [data, clicked]);
 
   // Helper lerp function
-  const lerp = (v0: number, v1: number, t: number) => {
-    return v0 * (1 - t) + v1 * t;
-  };
+  const lerp = (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t;
 
   // Dispose function to position items and wrap scroll
   const dispose = (menu: HTMLUListElement, scroll: number) => {
@@ -100,7 +95,7 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
         y: (y: string) => {
           const val = parseFloat(y);
           if (clicked) return `0px`;
-          if (!clicked) {
+          else {
             const wrapped = gsap.utils.wrap(
               -itemHeight,
               wrapHeight - itemHeight,
@@ -108,7 +103,6 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
             );
             return `${wrapped}px`;
           }
-          return `${val}px`;
         },
       },
     });
@@ -131,7 +125,7 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     if (!isDraggingRef.current) return;
     const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
     const delta = clientY - touchStartRef.current;
-    scrollYRef.current += delta * 2.5; // same multiplier as original
+    scrollYRef.current += delta * 2.5; // multiplier for scroll speed
     touchStartRef.current = clientY;
   };
 
@@ -140,7 +134,7 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     menuRef.current.forEach((menu) => menu.classList.remove("is-dragging"));
   };
 
-  // Resize handler to update item and wrap heights
+  // Resize handler
   const handleResize = () => {
     if (!menuRef.current.length) return;
     const firstMenu = menuRef.current[0];
@@ -162,7 +156,6 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     oldScrollYRef.current = yRef.current;
   };
 
-  // Setup event listeners & initialize on data change
   useEffect(() => {
     if (!menuRef.current.length) return;
 
@@ -171,13 +164,11 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     yRef.current = 0;
     oldScrollYRef.current = 0;
 
-    // Add wheel event listener to container
     const container = containerRef.current;
     if (!container) return;
 
     container.addEventListener("wheel", handleWheel, { passive: true });
 
-    // Add touch and mouse events to each menu
     menuRef.current.forEach((menu) => {
       menu.addEventListener("touchstart", handleTouchStart);
       menu.addEventListener("touchmove", handleTouchMove);
@@ -186,19 +177,21 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
       menu.addEventListener("mousemove", handleTouchMove);
       menu.addEventListener("mouseup", handleTouchEnd);
       menu.addEventListener("mouseleave", handleTouchEnd);
-
-      // Prevent text selection on drag
       menu.addEventListener("selectstart", (e) => e.preventDefault());
     });
 
     window.addEventListener("resize", handleResize);
 
-    // Start animation loop
-    render();
-
+    // Start animation loop only if clicked is false (control infinite scroll)
+    
+  if (!clicked) {
+    // Start infinite scroll only when clicked === false
+    animationFrameId.current = requestAnimationFrame(render);
+  }
     return () => {
       if (animationFrameId.current)
         cancelAnimationFrame(animationFrameId.current);
+
       container.removeEventListener("wheel", handleWheel);
 
       menuRef.current.forEach((menu) => {
@@ -214,7 +207,7 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
 
       window.removeEventListener("resize", handleResize);
     };
-  }, [data]);
+  }, [data, clicked]);
 
   return (
     <div
