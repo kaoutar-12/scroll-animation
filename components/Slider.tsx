@@ -3,12 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import "@/styles/slider.css";
 import Card from "./Card";
-
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 export type MovieResult = {
   id: number;
@@ -24,13 +20,26 @@ export type MovieApiResponse = {
 };
 
 const columns = 5;
-const moviesPerColumn = 25;
-const totalMovies = columns * moviesPerColumn; // 500
+const moviesPerColumn = 10;
+const totalMovies = columns * moviesPerColumn; // 125
 
 const Slider = ({ clicked }: { clicked: boolean }) => {
   const [data, setData] = useState<MovieResult[][]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Refs for scroll and animation variables
+  const menuRef = useRef<HTMLUListElement[]>([]);
+  const scrollYRef = useRef(0);
+  const yRef = useRef(0);
+  const oldScrollYRef = useRef(0);
+  const scrollSpeedRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const touchStartRef = useRef(0);
+  const itemHeightRef = useRef(0);
+  const wrapHeightRef = useRef(0);
+  const animationFrameId = useRef<number | null>(null);
+
+  // Fetch movies
   const getData = async () => {
     try {
       const totalPagesToFetch = Math.ceil(totalMovies / 20); // TMDb returns 20 per page
@@ -50,7 +59,6 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
       const responses = await Promise.all(requests);
       const allMovies = responses.flatMap((res) => res.data.results);
 
-      // Slice into 5 columns of 100 movies each
       const columnsData = Array.from({ length: columns }, (_, i) =>
         allMovies.slice(i * moviesPerColumn, (i + 1) * moviesPerColumn)
       );
@@ -65,46 +73,144 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     getData();
   }, []);
 
+  // Setup refs for each column ul
   useEffect(() => {
-    if (!data.length) return;
+    if (!containerRef.current) return;
+    const cols = containerRef.current.querySelectorAll(
+      "ul.column, ul.column-clicked"
+    );
+    menuRef.current = Array.from(cols) as HTMLUListElement[];
+  }, [data, clicked]);
 
-    const triggers: ScrollTrigger[] = [];
-    const columns = containerRef.current?.querySelectorAll(".column");
-    if (!columns) return;
+  // Helper lerp function
+  const lerp = (v0: number, v1: number, t: number) => {
+    return v0 * (1 - t) + v1 * t;
+  };
 
-    columns.forEach((col) => {
-      const colHeight = col.scrollHeight;
-      // Duplicate content for seamless loop
-      col.innerHTML += col.innerHTML;
+  // Dispose function to position items and wrap scroll
+  const dispose = (menu: HTMLUListElement, scroll: number) => {
+    const items = menu.querySelectorAll(".small-part");
+    const itemHeight = itemHeightRef.current;
+    const wrapHeight = wrapHeightRef.current;
 
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: containerRef.current,
-          start: "top top",
-          end: `+=${colHeight}`,
-          scrub: true,
-          onUpdate: (self) => {
-            let scrollY = self.scroll();
+    gsap.set(items, {
+      y: (i: number) => i * itemHeight + scroll,
+      modifiers: {
+        y: (y: string) => {
+          const val = parseFloat(y);
+          // Wrap between -itemHeight and wrapHeight - itemHeight
+          const wrapped = gsap.utils.wrap(
+            -itemHeight,
+            wrapHeight - itemHeight,
+            val
+          );
+          return `${wrapped}px`;
+        },
+      },
+    });
+  };
 
-            if (scrollY > colHeight) {
-              scrollY = scrollY % colHeight;
-              gsap.to(window, { scrollTo: scrollY, duration: 0 });
-            }
+  // Wheel handler
+  const handleWheel = (e: WheelEvent) => {
+    scrollYRef.current -= e.deltaY;
+  };
 
-            gsap.to(col, {
-              y: -scrollY,
-              ease: "none",
-              overwrite: true,
-            });
-          },
-        })
-      );
+  // Touch / mouse drag handlers
+  const handleTouchStart = (e: TouchEvent | MouseEvent) => {
+    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+    touchStartRef.current = clientY;
+    isDraggingRef.current = true;
+    menuRef.current.forEach((menu) => menu.classList.add("is-dragging"));
+  };
+
+  const handleTouchMove = (e: TouchEvent | MouseEvent) => {
+    if (!isDraggingRef.current) return;
+    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+    const delta = clientY - touchStartRef.current;
+    scrollYRef.current += delta * 2.5; // same multiplier as original
+    touchStartRef.current = clientY;
+  };
+
+  const handleTouchEnd = () => {
+    isDraggingRef.current = false;
+    menuRef.current.forEach((menu) => menu.classList.remove("is-dragging"));
+  };
+
+  // Resize handler to update item and wrap heights
+  const handleResize = () => {
+    if (!menuRef.current.length) return;
+    const firstMenu = menuRef.current[0];
+    const items = firstMenu.querySelectorAll(".small-part");
+    if (items.length === 0) return;
+
+    itemHeightRef.current = (items[0] as HTMLElement).clientHeight;
+    wrapHeightRef.current = items.length * itemHeightRef.current;
+  };
+
+  // Animation render loop
+  const render = () => {
+    animationFrameId.current = requestAnimationFrame(render);
+
+    yRef.current = lerp(yRef.current, scrollYRef.current, 0.1);
+    menuRef.current.forEach((menu) => dispose(menu, yRef.current));
+
+    scrollSpeedRef.current = yRef.current - oldScrollYRef.current;
+    oldScrollYRef.current = yRef.current;
+  };
+
+  // Setup event listeners & initialize on data change
+  useEffect(() => {
+    if (!menuRef.current.length) return;
+
+    handleResize();
+    scrollYRef.current = 0;
+    yRef.current = 0;
+    oldScrollYRef.current = 0;
+
+    // Add wheel event listener to container
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.addEventListener("wheel", handleWheel, { passive: true });
+
+    // Add touch and mouse events to each menu
+    menuRef.current.forEach((menu) => {
+      menu.addEventListener("touchstart", handleTouchStart);
+      menu.addEventListener("touchmove", handleTouchMove);
+      menu.addEventListener("touchend", handleTouchEnd);
+      menu.addEventListener("mousedown", handleTouchStart);
+      menu.addEventListener("mousemove", handleTouchMove);
+      menu.addEventListener("mouseup", handleTouchEnd);
+      menu.addEventListener("mouseleave", handleTouchEnd);
+
+      // Prevent text selection on drag
+      menu.addEventListener("selectstart", (e) => e.preventDefault());
     });
 
+    window.addEventListener("resize", handleResize);
+
+    // Start animation loop
+    render();
+
     return () => {
-      triggers.forEach((t) => t.kill());
+      if (animationFrameId.current)
+        cancelAnimationFrame(animationFrameId.current);
+      container.removeEventListener("wheel", handleWheel);
+
+      menuRef.current.forEach((menu) => {
+        menu.removeEventListener("touchstart", handleTouchStart);
+        menu.removeEventListener("touchmove", handleTouchMove);
+        menu.removeEventListener("touchend", handleTouchEnd);
+        menu.removeEventListener("mousedown", handleTouchStart);
+        menu.removeEventListener("mousemove", handleTouchMove);
+        menu.removeEventListener("mouseup", handleTouchEnd);
+        menu.removeEventListener("mouseleave", handleTouchEnd);
+        menu.removeEventListener("selectstart", (e) => e.preventDefault());
+      });
+
+      window.removeEventListener("resize", handleResize);
     };
-  }, [data]);
+  }, [data, clicked]);
 
   return (
     <div
@@ -112,7 +218,14 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
       ref={containerRef}
     >
       {data.map((column, colIndex) => (
-        <ul key={colIndex} className={clicked ? "column-clicked" : "column"}>
+        <ul
+          key={colIndex}
+          className={clicked ? "column-clicked" : "column"}
+          ref={(el) => {
+            if (el) menuRef.current[colIndex] = el;
+          }}
+        >
+          {/* Render the movies */}
           {Array(10)
             .fill(column)
             .flat()
