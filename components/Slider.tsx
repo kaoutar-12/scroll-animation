@@ -78,7 +78,10 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     if (!containerRef.current) return;
     const cols = containerRef.current.querySelectorAll("ul.column");
     menuRef.current = Array.from(cols) as HTMLUListElement[];
-  }, [data, clicked]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [data, clicked]);
+    
 
   // Helper lerp function
   const lerp = (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t;
