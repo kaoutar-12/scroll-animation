@@ -2,88 +2,46 @@
 .container--clicked {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-  overflow: hidden;
-  height: 100vh;
-  padding: 0;
-  will-change: transform;
 }
 
 .container--clicked {
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
-  padding-left: 150px;
-  padding-top: 10%;
+  grid-template-rows: repeat(5, 1fr);
   width: 90%;
 }
 
 .column {
   position: relative;
   height: 100vh;
-  display: block;
 }
 
 /* Column vertical offset */
-.column:nth-child(1) { transform: translateY(-100px); }
-.column:nth-child(2) { transform: translateY(-60px); }
-.column:nth-child(3) { transform: translateY(-150px); }
-.column:nth-child(4) { transform: translateY(-30px); }
-.column:nth-child(5) { transform: translateY(-200px); }
+.column:nth-child(1) {
+  transform: translateY(-100px);
+}
+.column:nth-child(2) {
+  transform: translateY(-60px);
+}
+.column:nth-child(3) {
+  transform: translateY(-150px);
+}
+.column:nth-child(4) {
+  transform: translateY(-30px);
+}
+.column:nth-child(5) {
+  transform: translateY(-200px);
+}
 
 .small-part {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
+
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  user-select: none;
-  z-index: 1;
+  flex-direction: column;
 }
 
 .small-part:hover {
-  transform: scale(1.03) rotate(0.5deg);
-  z-index: 10;
+  transform: rotate(50deg);
   filter: brightness(1.1);
-}
-
-/* Hover rotation depending on column parity */
-.column:nth-child(odd) .small-part:hover {
-  transform: scale(1.03) rotate(0.5deg);
-}
-
-.column:nth-child(even) .small-part:hover {
-  transform: scale(1.03) rotate(-0.5deg);
-}
-
-/* Infinite scroll animation per column */
-.column {
-  animation: scrollColumn 30s infinite;
-}
-
-.column:nth-child(1) {
-  animation-delay: 0s;
-  animation-duration: 30s;
-}
-
-.column:nth-child(2) {
-  animation-delay: 20s;
-  animation-duration: 320s;
-}
-
-.column:nth-child(3) {
-  animation-delay: 4s;
-  animation-duration: 34s;
-}
-
-.column:nth-child(4) {
-  animation-delay: 6s;
-  animation-duration: 36s;
-}
-
-.column:nth-child(5) {
-  animation-delay: 8s;
-  animation-duration: 38s;
+  z-index: 10;
 }
