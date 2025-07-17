@@ -1,14 +1,22 @@
-.container,
-.container--clicked {
+.container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  width: 100%;
 }
-
-.container--clicked {
+.container-clicked {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  width: 90%;
+}
+
+.column-clicked {
+}
+
+.small-part-clicked {
+}
+
+.column-clicked ul {
+  display: flex;
+  gap: 10px;
 }
 
 .column {
@@ -38,10 +46,5 @@
 
   display: flex;
   flex-direction: column;
-}
-
-.small-part:hover {
-  transform: rotate(50deg);
-  filter: brightness(1.1);
-  z-index: 10;
+  background: red;
 }

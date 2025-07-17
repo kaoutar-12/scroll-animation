@@ -8,7 +8,7 @@ export default function Home() {
  
   const [clicked, setClicked] = useState(false);
   return (
-    <div>
+    <div className="home">
       <Navbar setClicked={setClicked}/>
       <Slider clicked={clicked}/>
       <Favorite/>

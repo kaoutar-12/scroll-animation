@@ -6,6 +6,7 @@ body{
   overflow-x: hidden;
   scroll-behavior: smooth;
   position: relative;
+
 }
 
 :root {
@@ -25,3 +26,4 @@ body{
 body::-webkit-scrollbar {
   display: none;
 }
+

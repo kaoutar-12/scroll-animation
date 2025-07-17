@@ -20,7 +20,7 @@ export type MovieApiResponse = {
 };
 
 const columns = 5;
-const moviesPerColumn = 10;
+const moviesPerColumn = 25;
 const totalMovies = columns * moviesPerColumn; // 125
 
 const Slider = ({ clicked }: { clicked: boolean }) => {
@@ -38,6 +38,9 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
   const itemHeightRef = useRef(0);
   const wrapHeightRef = useRef(0);
   const animationFrameId = useRef<number | null>(null);
+
+  // Wheel handler (now in correct scope)
+  // (Removed duplicate handleWheel declaration)
 
   // Fetch movies
   const getData = async () => {
@@ -76,9 +79,7 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
   // Setup refs for each column ul
   useEffect(() => {
     if (!containerRef.current) return;
-    const cols = containerRef.current.querySelectorAll(
-      "ul.column, ul.column-clicked"
-    );
+    const cols = containerRef.current.querySelectorAll("ul.column");
     menuRef.current = Array.from(cols) as HTMLUListElement[];
   }, [data, clicked]);
 
@@ -98,13 +99,16 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
       modifiers: {
         y: (y: string) => {
           const val = parseFloat(y);
-          // Wrap between -itemHeight and wrapHeight - itemHeight
-          const wrapped = gsap.utils.wrap(
-            -itemHeight,
-            wrapHeight - itemHeight,
-            val
-          );
-          return `${wrapped}px`;
+          if (clicked) return `0px`;
+          if (!clicked) {
+            const wrapped = gsap.utils.wrap(
+              -itemHeight,
+              wrapHeight - itemHeight,
+              val
+            );
+            return `${wrapped}px`;
+          }
+          return `${val}px`;
         },
       },
     });
@@ -210,14 +214,14 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
 
       window.removeEventListener("resize", handleResize);
     };
-  }, [data, clicked]);
+  }, [data]);
 
   return (
     <div
       className={clicked ? "container-clicked" : "container"}
       ref={containerRef}
     >
-      {data.map((column, colIndex) => (
+      {data.slice(0, clicked ? 4 : 5).map((column, colIndex) => (
         <ul
           key={colIndex}
           className={clicked ? "column-clicked" : "column"}
@@ -226,11 +230,14 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
           }}
         >
           {/* Render the movies */}
-          {Array(10)
+          {Array(5)
             .fill(column)
             .flat()
             .map((movie, i) => (
-              <li key={`${movie.id}-${i}`} className="small-part">
+              <li
+                key={`${movie.id}-${i}`}
+                className={clicked ? "small-part-clicked" : "small-part"}
+              >
                 <Card movie={movie} />
               </li>
             ))}
