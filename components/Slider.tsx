@@ -109,6 +109,7 @@ const Slider = ({
       const scroll = scrollYRef.current;
       menuRef.current.forEach((menu) => dispose(menu, scroll));
     }
+    
   }, [data, clicked]);
 
   const handleWheel = (e: WheelEvent) => {
