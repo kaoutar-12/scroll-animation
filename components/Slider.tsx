@@ -246,17 +246,21 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
             if (el) menuRef.current[colIndex] = el;
           }}
         >
-          {Array(5)
-            .fill(column)
-            .flat()
-            .map((movie, i) => (
-              <li
-                key={`${movie.id}-${i}`}
-                className={clicked ? "small-part-clicked" : "small-part"}
-              >
-                <Card movie={movie} />
-              </li>
-            ))}
+          <div className="column-content">
+            {Array(5)
+              .fill(column)
+              .flat()
+              .map((movie, i) => (
+                <li
+                  key={`${movie.id}-${i}`}
+                  className={clicked ? "small-part-clicked" : "small-part"}
+                >
+                  <div className="card-container">
+                    <Card movie={movie} />
+                  </div>
+                </li>
+              ))}
+          </div>
         </ul>
       ))}
     </div>
