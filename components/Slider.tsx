@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import "@/styles/slider.css";
 import Card from "./Card";

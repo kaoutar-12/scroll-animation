@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import "../styles/navbar.css";
 import { CgSearch } from "react-icons/cg";
 import { MovieResult } from "./Slider";
@@ -40,7 +40,7 @@ const Navbar = ({
     // });
 
     // console.log("Filtered Data:", filteredData);
-  }, [searchQuery, data]);
+  }, [searchQuery, data, setSearchData]);
 
   return (
     <nav className="navbar">
