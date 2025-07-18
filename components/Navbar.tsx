@@ -9,10 +9,12 @@ const Navbar = ({
   setClicked,
   setSearchData,
   data,
+  setIsTyping,
 }: {
   setClicked: (val: boolean) => void;
   setSearchData: (data: MovieResult[][]) => void;
   data: MovieResult[][];
+  setIsTyping: (val: boolean) => void;
 }) => {
   const [search, setSearch] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -31,32 +33,39 @@ const Navbar = ({
         try {
           // Use the search endpoint instead of trending
           const response = await axios.get<MovieApiResponse>(
-            `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${encodeURIComponent(search)}`,
+            `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${encodeURIComponent(
+              search
+            )}`,
             {
               headers: {
                 Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
               },
             }
           );
-          
+
           // Get search results
           const searchResults = response.data.results || [];
-          
+
+          console.log("Search results:", searchResults);
+
           // Filter by name or title (movies from search only have title)
-          const filteredMovies = searchResults.filter((movie) =>
-            (movie.title?.toLowerCase().includes(search.toLowerCase()) ||
-            (movie.name?.toLowerCase().includes(search.toLowerCase()))
-          ));
-          
+          const filteredMovies = searchResults.filter(
+            (movie) =>
+              movie.title?.toLowerCase().includes(search.toLowerCase()) ||
+              movie.name?.toLowerCase().includes(search.toLowerCase())
+          );
+
           // Convert to column format (4 columns for clicked state)
           const columnsData = Array.from({ length: 4 }, (_, i) => {
             const start = Math.floor(filteredMovies.length / 4) * i;
-            const end = i === 3 ? filteredMovies.length : Math.floor(filteredMovies.length / 4) * (i + 1);
+            const end =
+              i === 3
+                ? filteredMovies.length
+                : Math.floor(filteredMovies.length / 4) * (i + 1);
             return filteredMovies.slice(start, end);
           });
-          
+
           setSearchData(columnsData);
-          console.log("Search results:", columnsData);
         } catch (error) {
           console.error("Search error:", error);
           setSearchData([]); // Set empty array on error
@@ -82,7 +91,11 @@ const Navbar = ({
             type="text"
             placeholder="Search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSearch(value);
+              setIsTyping(value.trim() !== "");
+            }}
             onClick={handleClick}
           />
           <CgSearch className="icon" />

@@ -27,9 +27,11 @@ export const totalMovies = columns * moviesPerColumn;
 const Slider = ({
   clicked,
   data,
+  isTyping,
 }: {
   clicked: boolean;
   data: MovieResult[][];
+  isTyping: boolean;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -226,7 +228,13 @@ const Slider = ({
               .map((movie, i) => (
                 <li
                   key={`${movie.id}-${i}`}
-                  className={clicked ? "small-part-clicked" : "small-part"}
+                  className={`${
+                    isTyping
+                      ? "typing"
+                      : clicked
+                      ? "small-part-clicked"
+                      : "small-part"
+                  }`}
                 >
                   <div className="card-container">
                     <Card movie={movie} />

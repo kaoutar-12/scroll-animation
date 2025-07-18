@@ -1,5 +1,11 @@
 "use client";
-import Slider, { columns, MovieApiResponse, MovieResult, moviesPerColumn, totalMovies } from "../components/Slider";
+import Slider, {
+  columns,
+  MovieApiResponse,
+  MovieResult,
+  moviesPerColumn,
+  totalMovies,
+} from "../components/Slider";
 import Navbar from "@/components/Navbar";
 import Favorite from "@/components/Favorite";
 import { useEffect, useState } from "react";
@@ -8,6 +14,7 @@ import axios from "axios";
 export default function Home() {
   const [data, setData] = useState<MovieResult[][]>([]);
   const [searchData, setSearchData] = useState<MovieResult[][]>([]);
+  const [isTyping, setIsTyping] = useState(false);
 
   const getData = async () => {
     try {
@@ -38,15 +45,20 @@ export default function Home() {
     }
   };
 
-   useEffect(() => {
+  useEffect(() => {
     getData();
   }, []);
 
   const [clicked, setClicked] = useState(false);
   return (
     <div className="home">
-      <Navbar setClicked={setClicked} setSearchData={setSearchData} data={data} />
-      <Slider clicked={clicked} data={data} />
+      <Navbar
+        setClicked={setClicked}
+        setSearchData={setSearchData}
+        data={data}
+        setIsTyping={setIsTyping}
+      />
+      <Slider clicked={clicked} data={searchData} isTyping={isTyping} />
       <Favorite />
     </div>
   );
