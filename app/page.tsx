@@ -9,8 +9,6 @@ export default function Home() {
   const [data, setData] = useState<MovieResult[][]>([]);
   const [searchData, setSearchData] = useState<MovieResult[][]>([]);
 
-
- 
   const getData = async () => {
     try {
       const totalPagesToFetch = Math.ceil(totalMovies / 20);
@@ -48,7 +46,7 @@ export default function Home() {
   return (
     <div className="home">
       <Navbar setClicked={setClicked} setSearchData={setSearchData} data={data} />
-      <Slider clicked={clicked} data={searchData} />
+      <Slider clicked={clicked} data={data} />
       <Favorite />
     </div>
   );

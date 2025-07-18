@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { gsap } from "gsap";
 import "@/styles/slider.css";
 import Card from "./Card";
@@ -20,7 +21,7 @@ export type MovieApiResponse = {
 };
 
 export const columns = 5;
-export const moviesPerColumn = 10000;
+export const moviesPerColumn = 10;
 export const totalMovies = columns * moviesPerColumn;
 
 const Slider = ({
