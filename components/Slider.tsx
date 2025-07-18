@@ -21,13 +21,12 @@ export type MovieApiResponse = {
 
 const columns = 5;
 const moviesPerColumn = 25;
-const totalMovies = columns * moviesPerColumn; // 125
+const totalMovies = columns * moviesPerColumn;
 
 const Slider = ({ clicked }: { clicked: boolean }) => {
   const [data, setData] = useState<MovieResult[][]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Refs for scroll and animation variables
   const menuRef = useRef<HTMLUListElement[]>([]);
   const scrollYRef = useRef(0);
   const yRef = useRef(0);
@@ -39,10 +38,28 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
   const wrapHeightRef = useRef(0);
   const animationFrameId = useRef<number | null>(null);
 
-  // Fetch movies
+  useEffect(() => {
+    if (clicked) {
+      // Reset scroll values when entering clicked state
+      scrollYRef.current = 0;
+      yRef.current = 0;
+      oldScrollYRef.current = 0;
+
+      // Clear all GSAP transforms
+      menuRef.current.forEach((menu) => {
+        const items = menu.querySelectorAll<HTMLElement>(
+          ".small-part, .small-part-clicked"
+        );
+        items.forEach((item) => {
+          gsap.set(item, { clearProps: "transform" });
+        });
+      });
+    }
+  }, [clicked]);
+
   const getData = async () => {
     try {
-      const totalPagesToFetch = Math.ceil(totalMovies / 20); // TMDb returns 20 per page
+      const totalPagesToFetch = Math.ceil(totalMovies / 20);
       const requests = Array.from({ length: totalPagesToFetch }, (_, i) =>
         axios.get<MovieApiResponse>(
           `https://api.themoviedb.org/3/trending/all/day?language=en-US&page=${
@@ -73,50 +90,56 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     getData();
   }, []);
 
-  // Setup refs for each column ul
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const cols = containerRef.current.querySelectorAll("ul.column");
-    menuRef.current = Array.from(cols) as HTMLUListElement[];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [data, clicked]);
-    
-
-  // Helper lerp function
   const lerp = (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t;
 
-  // Dispose function to position items and wrap scroll
   const dispose = (menu: HTMLUListElement, scroll: number) => {
-    const items = menu.querySelectorAll(".small-part");
-    const itemHeight = itemHeightRef.current;
-    const wrapHeight = wrapHeightRef.current;
+    const items = menu.querySelectorAll<HTMLElement>(
+      ".small-part, .small-part-clicked"
+    );
 
-    gsap.set(items, {
-      y: (i: number) => i * itemHeight + scroll,
-      modifiers: {
-        y: (y: string) => {
-          const val = parseFloat(y);
-          if (clicked) return `0px`;
-          else {
+    if (clicked) {
+      // Clear all transforms in clicked state
+      items.forEach((item) => {
+        gsap.set(item, { clearProps: "transform" });
+      });
+    } else {
+      const itemHeight = itemHeightRef.current;
+      const wrapHeight = wrapHeightRef.current;
+
+      gsap.set(items, {
+        y: (i: number) => i * itemHeight + scroll,
+        modifiers: {
+          y: (y: string) => {
+            const val = parseFloat(y);
             const wrapped = gsap.utils.wrap(
               -itemHeight,
               wrapHeight - itemHeight,
               val
             );
             return `${wrapped}px`;
-          }
+          },
         },
-      },
-    });
+      });
+    }
   };
+  useEffect(() => {
+    if (!containerRef.current) return;
 
-  // Wheel handler
+    const cols = containerRef.current.querySelectorAll(
+      "ul.column, ul.column-clicked"
+    );
+    menuRef.current = Array.from(cols) as HTMLUListElement[];
+
+    if (!clicked) {
+      const scroll = scrollYRef.current;
+      menuRef.current.forEach((menu) => dispose(menu, scroll));
+    }
+  }, [data, clicked]);
+
   const handleWheel = (e: WheelEvent) => {
     scrollYRef.current -= e.deltaY;
   };
 
-  // Touch / mouse drag handlers
   const handleTouchStart = (e: TouchEvent | MouseEvent) => {
     const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
     touchStartRef.current = clientY;
@@ -128,7 +151,7 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     if (!isDraggingRef.current) return;
     const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
     const delta = clientY - touchStartRef.current;
-    scrollYRef.current += delta * 2.5; // multiplier for scroll speed
+    scrollYRef.current += delta * 2.5;
     touchStartRef.current = clientY;
   };
 
@@ -137,18 +160,16 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     menuRef.current.forEach((menu) => menu.classList.remove("is-dragging"));
   };
 
-  // Resize handler
   const handleResize = () => {
     if (!menuRef.current.length) return;
     const firstMenu = menuRef.current[0];
     const items = firstMenu.querySelectorAll(".small-part");
-    if (items.length === 0) return;
+    if (!items.length) return;
 
     itemHeightRef.current = (items[0] as HTMLElement).clientHeight;
     wrapHeightRef.current = items.length * itemHeightRef.current;
   };
 
-  // Animation render loop
   const render = () => {
     animationFrameId.current = requestAnimationFrame(render);
 
@@ -170,27 +191,27 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
     const container = containerRef.current;
     if (!container) return;
 
-    container.addEventListener("wheel", handleWheel, { passive: true });
+    if (!clicked) {
+      container.addEventListener("wheel", handleWheel, { passive: true });
+      animationFrameId.current = requestAnimationFrame(render);
 
-    menuRef.current.forEach((menu) => {
-      menu.addEventListener("touchstart", handleTouchStart);
-      menu.addEventListener("touchmove", handleTouchMove);
-      menu.addEventListener("touchend", handleTouchEnd);
-      menu.addEventListener("mousedown", handleTouchStart);
-      menu.addEventListener("mousemove", handleTouchMove);
-      menu.addEventListener("mouseup", handleTouchEnd);
-      menu.addEventListener("mouseleave", handleTouchEnd);
-      menu.addEventListener("selectstart", (e) => e.preventDefault());
-    });
-
+      menuRef.current.forEach((menu) => {
+        menu.addEventListener("touchstart", handleTouchStart);
+        menu.addEventListener("touchmove", handleTouchMove);
+        menu.addEventListener("touchend", handleTouchEnd);
+        menu.addEventListener("mousedown", handleTouchStart);
+        menu.addEventListener("mousemove", handleTouchMove);
+        menu.addEventListener("mouseup", handleTouchEnd);
+        menu.addEventListener("mouseleave", handleTouchEnd);
+        menu.addEventListener("selectstart", (e) => e.preventDefault());
+      });
+    }
     window.addEventListener("resize", handleResize);
 
-    // Start animation loop only if clicked is false (control infinite scroll)
-    
-  if (!clicked) {
-    // Start infinite scroll only when clicked === false
-    animationFrameId.current = requestAnimationFrame(render);
-  }
+    if (!clicked) {
+      animationFrameId.current = requestAnimationFrame(render);
+    }
+
     return () => {
       if (animationFrameId.current)
         cancelAnimationFrame(animationFrameId.current);
@@ -225,7 +246,6 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
             if (el) menuRef.current[colIndex] = el;
           }}
         >
-          {/* Render the movies */}
           {Array(5)
             .fill(column)
             .flat()
