@@ -10,6 +10,7 @@ export type MovieResult = {
   id: number;
   title: string;
   poster_path: string;
+  name: string;
 };
 
 export type MovieApiResponse = {
@@ -19,12 +20,17 @@ export type MovieApiResponse = {
   total_results: number;
 };
 
-const columns = 5;
-const moviesPerColumn = 25;
-const totalMovies = columns * moviesPerColumn;
+export const columns = 5;
+export const moviesPerColumn = 10000;
+export const totalMovies = columns * moviesPerColumn;
 
-const Slider = ({ clicked }: { clicked: boolean }) => {
-  const [data, setData] = useState<MovieResult[][]>([]);
+const Slider = ({
+  clicked,
+  data,
+}: {
+  clicked: boolean;
+  data: MovieResult[][];
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const menuRef = useRef<HTMLUListElement[]>([]);
@@ -56,39 +62,6 @@ const Slider = ({ clicked }: { clicked: boolean }) => {
       });
     }
   }, [clicked]);
-
-  const getData = async () => {
-    try {
-      const totalPagesToFetch = Math.ceil(totalMovies / 20);
-      const requests = Array.from({ length: totalPagesToFetch }, (_, i) =>
-        axios.get<MovieApiResponse>(
-          `https://api.themoviedb.org/3/trending/all/day?language=en-US&page=${
-            i + 1
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            },
-          }
-        )
-      );
-
-      const responses = await Promise.all(requests);
-      const allMovies = responses.flatMap((res) => res.data.results);
-
-      const columnsData = Array.from({ length: columns }, (_, i) =>
-        allMovies.slice(i * moviesPerColumn, (i + 1) * moviesPerColumn)
-      );
-
-      setData(columnsData);
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const lerp = (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t;
 

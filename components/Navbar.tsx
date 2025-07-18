@@ -1,34 +1,46 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import "../styles/navbar.css";
 import { CgSearch } from "react-icons/cg";
+import { MovieResult } from "./Slider";
 
-const Navbar = ({setClicked}: {setClicked:(val:boolean)=> void}) => {
+const Navbar = ({
+  setClicked,
+  setSearchData,
+  data,
+}: {
+  setClicked: (val: boolean) => void;
+  setSearchData: (data: MovieResult[][]) => void;
+  data: MovieResult[][];
+}) => {
   const handleClick = () => setClicked(true);
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value.trim();
+  const [searchQuery, setSearchQuery] = React.useState("");
 
-    if (!query) return;
+ 
 
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${encodeURIComponent(
-          query
-        )}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-      console.log("Search results:", data.results); // You can pass this to state or props
-    } catch (error) {
-      console.error("Search failed:", error);
+  useEffect(() => {
+    if (searchQuery === "") {
+      setSearchData(data);
+      return;
     }
-  };
+    const filteredData = data.map((column) =>
+      column.filter(
+        (item) =>
+          item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.title?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+    console.log("Filtered Data:", filteredData);
+    setSearchData(filteredData);
+    // const filteredData = data.map((column) => {
+    //   column.map((item) => {
+    //    console.log("Item:", item.name || item.title);
+    //   })
+    //   console.log("Filtered Column:", column);
+    // });
 
+    // console.log("Filtered Data:", filteredData);
+  }, [searchQuery, data]);
 
   return (
     <nav className="navbar">
@@ -40,7 +52,9 @@ const Navbar = ({setClicked}: {setClicked:(val:boolean)=> void}) => {
           <input
             type="text"
             placeholder="Search"
-            onChange={handleSearch}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
             onClick={handleClick}
           />
           <CgSearch className="icon" />
