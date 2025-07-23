@@ -3,9 +3,7 @@
 .navbar {
   width: 100vw;
   height: 80px;
-
   display: flex;
-
   align-items: center;
   position: fixed;
   top: 0;
@@ -13,6 +11,7 @@
   z-index: 10000;
   gap: 500px;
   padding-left: 30px;
+  background: blue;
 }
 .logo {
   width: 100px;

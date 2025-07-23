@@ -49,7 +49,6 @@ export default function Home() {
 
   return (
     <div className="home">
-      <Navbar />
       <Slider data={data} />
       <Favorite />
     </div>

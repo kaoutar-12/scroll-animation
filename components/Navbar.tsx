@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/dist/client/link";
 import "../styles/navbar.css";
 import { CgSearch } from "react-icons/cg";
 
@@ -10,9 +11,9 @@ const Navbar = () => {
         <span>CineVerse</span>
       </div>
       <div className="search">
-        <div className="search-inside">
+        <Link className="search-inside" href="/Search">
           <CgSearch className="icon" />
-        </div>
+        </Link>
       </div>
     </nav>
   );

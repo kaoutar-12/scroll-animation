@@ -1,0 +1,26 @@
+.search-page {
+  width: 100vw;
+  height: 100vh;
+
+  padding-top: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-container {
+  width: 60%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding-top: 100px;
+ 
+}
+
+.search-container  div {
+  background: lightpink;  
+  width: 200px;
+  height: 350px;
+}
