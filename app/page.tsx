@@ -13,8 +13,6 @@ import axios from "axios";
 
 export default function Home() {
   const [data, setData] = useState<MovieResult[][]>([]);
-  const [searchData, setSearchData] = useState<MovieResult[][]>([]);
-  const [isTyping, setIsTyping] = useState(false);
 
   const getData = async () => {
     try {
@@ -49,16 +47,10 @@ export default function Home() {
     getData();
   }, []);
 
-  const [clicked, setClicked] = useState(false);
   return (
     <div className="home">
-      <Navbar
-        setClicked={setClicked}
-        setSearchData={setSearchData}
-        data={data}
-        setIsTyping={setIsTyping}
-      />
-      <Slider clicked={clicked} data={searchData} isTyping={isTyping} />
+      <Navbar />
+      <Slider data={data} />
       <Favorite />
     </div>
   );

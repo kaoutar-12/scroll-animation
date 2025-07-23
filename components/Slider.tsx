@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import "@/styles/slider.css";
 import Card from "./Card";
@@ -24,15 +23,7 @@ export const columns = 5;
 export const moviesPerColumn = 10;
 export const totalMovies = columns * moviesPerColumn;
 
-const Slider = ({
-  clicked,
-  data,
-  isTyping,
-}: {
-  clicked: boolean;
-  data: MovieResult[][];
-  isTyping: boolean;
-}) => {
+const Slider = ({ data }: { data: MovieResult[][] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const menuRef = useRef<HTMLUListElement[]>([]);
@@ -46,71 +37,39 @@ const Slider = ({
   const wrapHeightRef = useRef(0);
   const animationFrameId = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (clicked) {
-      // Reset scroll values when entering clicked state
-      scrollYRef.current = 0;
-      yRef.current = 0;
-      oldScrollYRef.current = 0;
-
-      // Clear all GSAP transforms
-      menuRef.current.forEach((menu) => {
-        const items = menu.querySelectorAll<HTMLElement>(
-          ".small-part, .small-part-clicked"
-        );
-        items.forEach((item) => {
-          gsap.set(item, { clearProps: "transform" });
-        });
-      });
-    }
-  }, [clicked]);
-
   const lerp = (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t;
 
   const dispose = (menu: HTMLUListElement, scroll: number) => {
-    const items = menu.querySelectorAll<HTMLElement>(
-      ".small-part, .small-part-clicked"
-    );
+    const items = menu.querySelectorAll<HTMLElement>(".small-part");
 
-    if (clicked) {
-      // Clear all transforms in clicked state
-      items.forEach((item) => {
-        gsap.set(item, { clearProps: "transform" });
-      });
-    } else {
-      const itemHeight = itemHeightRef.current;
-      const wrapHeight = wrapHeightRef.current;
+    const itemHeight = itemHeightRef.current;
+    const wrapHeight = wrapHeightRef.current;
 
-      gsap.set(items, {
-        y: (i: number) => i * itemHeight + scroll,
-        modifiers: {
-          y: (y: string) => {
-            const val = parseFloat(y);
-            const wrapped = gsap.utils.wrap(
-              -itemHeight,
-              wrapHeight - itemHeight,
-              val
-            );
-            return `${wrapped}px`;
-          },
+    gsap.set(items, {
+      y: (i: number) => i * itemHeight + scroll,
+      modifiers: {
+        y: (y: string) => {
+          const val = parseFloat(y);
+          const wrapped = gsap.utils.wrap(
+            -itemHeight,
+            wrapHeight - itemHeight,
+            val
+          );
+          return `${wrapped}px`;
         },
-      });
-    }
+      },
+    });
   };
+
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const cols = containerRef.current.querySelectorAll(
-      "ul.column, ul.column-clicked"
-    );
+    const cols = containerRef.current.querySelectorAll("ul.column");
     menuRef.current = Array.from(cols) as HTMLUListElement[];
 
-    if (!clicked) {
-      const scroll = scrollYRef.current;
-      menuRef.current.forEach((menu) => dispose(menu, scroll));
-    }
-    
-  }, [data, clicked]);
+    const scroll = scrollYRef.current;
+    menuRef.current.forEach((menu) => dispose(menu, scroll));
+  }, [data]);
 
   const handleWheel = (e: WheelEvent) => {
     scrollYRef.current -= e.deltaY;
@@ -167,26 +126,21 @@ const Slider = ({
     const container = containerRef.current;
     if (!container) return;
 
-    if (!clicked) {
-      container.addEventListener("wheel", handleWheel, { passive: true });
-      animationFrameId.current = requestAnimationFrame(render);
+    container.addEventListener("wheel", handleWheel, { passive: true });
+    animationFrameId.current = requestAnimationFrame(render);
 
-      menuRef.current.forEach((menu) => {
-        menu.addEventListener("touchstart", handleTouchStart);
-        menu.addEventListener("touchmove", handleTouchMove);
-        menu.addEventListener("touchend", handleTouchEnd);
-        menu.addEventListener("mousedown", handleTouchStart);
-        menu.addEventListener("mousemove", handleTouchMove);
-        menu.addEventListener("mouseup", handleTouchEnd);
-        menu.addEventListener("mouseleave", handleTouchEnd);
-        menu.addEventListener("selectstart", (e) => e.preventDefault());
-      });
-    }
+    menuRef.current.forEach((menu) => {
+      menu.addEventListener("touchstart", handleTouchStart);
+      menu.addEventListener("touchmove", handleTouchMove);
+      menu.addEventListener("touchend", handleTouchEnd);
+      menu.addEventListener("mousedown", handleTouchStart);
+      menu.addEventListener("mousemove", handleTouchMove);
+      menu.addEventListener("mouseup", handleTouchEnd);
+      menu.addEventListener("mouseleave", handleTouchEnd);
+      menu.addEventListener("selectstart", (e) => e.preventDefault());
+    });
+
     window.addEventListener("resize", handleResize);
-
-    if (!clicked) {
-      animationFrameId.current = requestAnimationFrame(render);
-    }
 
     return () => {
       if (animationFrameId.current)
@@ -207,17 +161,14 @@ const Slider = ({
 
       window.removeEventListener("resize", handleResize);
     };
-  }, [data, clicked]);
+  }, [data]);
 
   return (
-    <div
-      className={clicked ? "container-clicked" : "container"}
-      ref={containerRef}
-    >
-      {data.slice(0, clicked ? 4 : 5).map((column, colIndex) => (
+    <div className="container" ref={containerRef}>
+      {data.map((column, colIndex) => (
         <ul
           key={colIndex}
-          className={clicked ? "column-clicked" : "column"}
+          className="column"
           ref={(el) => {
             if (el) menuRef.current[colIndex] = el;
           }}
@@ -227,16 +178,7 @@ const Slider = ({
               .fill(column)
               .flat()
               .map((movie, i) => (
-                <li
-                  key={`${movie.id}-${i}`}
-                  className={`${
-                    isTyping
-                      ? "typing"
-                      : clicked
-                      ? "small-part-clicked"
-                      : "small-part"
-                  }`}
-                >
+                <li key={`${movie.id}-${i}`} className="small-part">
                   <div className="card-container">
                     <Card movie={movie} />
                   </div>
