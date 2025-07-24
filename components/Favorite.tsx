@@ -49,7 +49,7 @@ const One: React.FC<{ toggleExpand: () => void }> = ({ toggleExpand }) => {
 
   return (
     <div className="list-wrapper">
-      <div className="list">
+      <div className="list-fav">
         {likedItems.map((_, index) => (
           <div key={index} className="liked">
             <div className="card-front" id={`front-${index}`}></div>

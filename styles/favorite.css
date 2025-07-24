@@ -85,10 +85,15 @@
   /* gap: 10px; */
 }
 
-.list {
+.list-fav {
   width: 500px;
   height: 100px;
   gap: 5px;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 }
 
 .list-big{
@@ -99,6 +104,7 @@
   justify-content: center;
   gap: 10px;
 }
+
 
 
 .liked {

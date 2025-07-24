@@ -9,9 +9,9 @@
   top: 0;
   left: 0;
   z-index: 10000;
-  gap: 500px;
+  gap: 700px;
   padding-left: 30px;
-  background: blue;
+  background: sandybrown;
 }
 .logo {
   width: 100px;
@@ -25,86 +25,31 @@
   align-items: center;
   padding-left: 100px;
 }
+
 .search {
-  width: 40%;
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-right: 30px;
-}
-
-.search-inside {
-  width: 100%;
-  height: 50%;
-  background: #a0dcff84;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-}
-
-.search-inside input {
-  width: 80%;
-  height: 60%;
-  border: none;
-  background: transparent;
-  font-family: 'Bebas neue';
-  font-size: 20px;
-  color: rgba(90, 0, 60, 1);
-}
-@media screen and (min-width: 1444px) {
-  .search-inside input{
-    width: 90%;
-  }
-  
-}
-.search-inside input::placeholder {
-  color: rgba(90, 0, 60, 1);
-  font-size: 20px;
-
-}
-.search-inside input:focus {
-  outline: none;
-  border: none;
-}
-.search-inside:hover .icon,
-.search-inside input:hover ~ .icon,
-.search-inside input:focus ~ .icon {
-  color: rgba(90, 0, 60, 1);
-}
-
-.search-inside:hover {
+  width: 70px;
+  height: 70px;
   background: #a0dcff;
-}
-
-.icon {
-  width: 20px;
-  height: 20px;
-  color: rgba(90, 0, 60, 1);
-}
-
-.list {
-  width: 80px;
-  height: 100%;
-  background: transparent;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+
 }
 
-.icon-list {
+.search .icon {
   width: 30px;
   height: 30px;
-  color: rgba(65, 63, 63, 0.8);
+  color: rgba(90, 0, 60, 1);
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 
-
-.refresh {
-  width: 30px;
-  height: 30px;
-  color: rgba(65, 63, 63, 0.8);
+.search .icon:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+  transition: all 0.3s ease-in-out;
 }
-
