@@ -5,12 +5,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 20px;
 }
 
 .search-bar {
   width: 60%;
-  height: 50px;
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,22 +25,22 @@
 }
 
 .search-container {
-  width: 90%;
+  width: 85%;
   height: 90%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
   padding-left: 20px;
-}
-
-.search-container.scrolling {
-  animation: scroll-up 60s linear infinite;
-  overflow-y: scroll;
+  overflow-y: auto; /* make it scrollable by default */
+  scroll-behavior: smooth;
   scrollbar-width: none;
-
 }
+
+/* Only apply animation when NOT searching */
+.search-container.scrolling {
+  overflow-y: scroll;
+}
+
 
 .movie-card {
   width: 300px;

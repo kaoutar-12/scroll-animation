@@ -12,73 +12,69 @@ export type SearchResult = {
 };
 
 const TOTAL_PAGES_TO_FETCH = 1;
-const COLUMNS = 5; // For layout
-const LOOP_COUNT = 20; // Controls how long the loop scrolls
+const LOOP_COUNT = 20;
 
 const SearchPage = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [initialMovies, setInitialMovies] = useState<SearchResult[]>([]);
 
-  const fetchInitialMovies = async () => {
-    try {
-      const requests = Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
-        axios.get("https://api.themoviedb.org/3/movie/popular", {
-          params: { page: i + 1 },
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-          },
-        })
-      );
-      const responses = await Promise.all(requests);
-      const allResults = responses.flatMap((res) => res.data.results || []);
-      setInitialMovies(allResults);
-    } catch (err) {
-      console.error("Error fetching initial movies:", err);
-    }
-  };
-
-  const fetchMovies = async (searchTerm: string) => {
-    if (!searchTerm) return;
-
-    try {
-      const requests = Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
-        axios.get("https://api.themoviedb.org/3/search/movie", {
-          params: { query: searchTerm, page: i + 1 },
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-          },
-        })
-      );
-      const responses = await Promise.all(requests);
-      const allResults = responses.flatMap((res) => res.data.results || []);
-      setResults(allResults);
-    } catch (err) {
-      console.error("Error fetching search results:", err);
-    }
-  };
-
   useEffect(() => {
+    const fetchInitialMovies = async () => {
+      try {
+        const responses = await Promise.all(
+          Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
+            axios.get("https://api.themoviedb.org/3/movie/popular", {
+              params: { page: i + 1 },
+              headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+              },
+            })
+          )
+        );
+        const movies = responses.flatMap((res) => res.data.results || []);
+        setInitialMovies(movies);
+      } catch (err) {
+        console.error("Error fetching popular movies:", err);
+      }
+    };
     fetchInitialMovies();
   }, []);
 
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
+    const delay = setTimeout(() => {
       if (query.trim()) {
-        fetchMovies(query);
+        fetchSearchResults(query);
       } else {
         setResults([]);
       }
     }, 500);
-
-    return () => clearTimeout(delayDebounce);
+    return () => clearTimeout(delay);
   }, [query]);
 
-  const moviesToShow = query.trim() ? results : initialMovies;
+  const fetchSearchResults = async (searchTerm: string) => {
+    try {
+      const responses = await Promise.all(
+        Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
+          axios.get("https://api.themoviedb.org/3/search/movie", {
+            params: { query: searchTerm, page: i + 1 },
+            headers: {
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+            },
+          })
+        )
+      );
+      const movies = responses.flatMap((res) => res.data.results || []);
+      setResults(movies);
+    } catch (err) {
+      console.error("Error searching movies:", err);
+    }
+  };
 
-  const repeatedMovies = !query.trim()
-    ? Array.from({ length: LOOP_COUNT }, () => moviesToShow).flat()
-    : moviesToShow;
+  const isSearching = query.trim().length > 0;
+  const moviesToDisplay = isSearching
+    ? results
+    : Array.from({ length: LOOP_COUNT }, () => initialMovies).flat();
 
   return (
     <div className="search-page">
@@ -91,9 +87,9 @@ const SearchPage = () => {
         />
       </div>
 
-      <div className={`search-container ${!query.trim() ? "scrolling" : ""}`}>
-        {repeatedMovies.length > 0 ? (
-          repeatedMovies.map((movie, index) => (
+      <div className={`search-container ${!isSearching ? "scrolling" : ""}`}>
+        {moviesToDisplay.length > 0 ? (
+          moviesToDisplay.map((movie, index) => (
             <div key={`${movie.id}-${index}`} className="movie-card">
               <Image
                 src={
@@ -101,14 +97,14 @@ const SearchPage = () => {
                     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                     : "/placeholder.png"
                 }
-                alt={movie.title || "movie poster"}
+                alt={movie.title}
                 fill
               />
             </div>
           ))
         ) : (
           <p className="no-results">
-            No results yet. Try searching for a movie.
+            {isSearching ? "No search results found." : "Loading movies..."}
           </p>
         )}
       </div>
