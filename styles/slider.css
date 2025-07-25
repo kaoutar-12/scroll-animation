@@ -1,80 +1,51 @@
 .container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  width: 100%;
-}
-.container-clicked {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  width: 70%;
-  justify-self: center;
-  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  gap: 80px;
 
-  padding-top: 100px;
-}
-
-.column-clicked {
-  position: relative;
-  height: 100vh;
 }
 
 .column {
   position: relative;
   height: 100vh;
-}
+  width: 100%;
+  will-change: transform;
+  padding: 0px;
 
-/* Column vertical offset */
-.column:nth-child(1) {
-  transform: translateY(-100px);
-}
-.column:nth-child(2) {
-  transform: translateY(-60px);
-}
-.column:nth-child(3) {
-  transform: translateY(-150px);
-}
-.column:nth-child(4) {
-  transform: translateY(-30px);
-}
-.column:nth-child(5) {
-  transform: translateY(-200px);
 }
 
 .small-part {
   position: absolute;
-
   display: flex;
   flex-direction: column;
-
-  padding-bottom: 20px;
-}
-.small-part-clicked {
-  position: absolute;
-  bottom: 0;
-
-  display: flex;
-  flex-direction: column;
+  gap: 20px;
+  will-change: transform;
+  padding: 0;
 }
 
 .card-container {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  width: 350px;
+  height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding-right: 0;
 }
 
 .card-container:hover {
-  transform: scale(1.02) rotate(0.5deg);
-  transition: transform 0.3s ease-in-out;
-  overflow-x: hidden;
+  transform: scale(1.03) rotate(0.5deg);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  z-index: 10;
 }
 
 .column-content {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  padding-left:-100px;
 }
 
-.typing {
-  display: flex;
-  flex-direction: column;
-}
+/* Dragging state */

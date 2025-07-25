@@ -14,8 +14,9 @@ const Card: React.FC<CardProps> = ({ movie }) => {
           src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
           alt={movie.title}
           loading="lazy"
-          width={300}
-          height={450}
+          width={350}
+          height={500}
+          
         />
       ) : (
         <Image
@@ -23,6 +24,7 @@ const Card: React.FC<CardProps> = ({ movie }) => {
           alt={movie.title}
           loading="lazy"
           fill
+         
         />
       )}
       {/* <h3>{movie.title}</h3> */}

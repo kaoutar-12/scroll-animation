@@ -90,7 +90,7 @@ const SearchPage = () => {
       <div className={`search-container ${!isSearching ? "scrolling" : ""}`}>
         {moviesToDisplay.length > 0 ? (
           moviesToDisplay.map((movie, index) => (
-            <div key={`${movie.id}-${index}`} className="movie-card">
+            <div key={`${movie.id}-${index}`} className="movie-card-search">
               <Image
                 src={
                   movie.poster_path
