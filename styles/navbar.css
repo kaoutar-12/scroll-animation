@@ -11,7 +11,8 @@
   z-index: 10000;
   gap: 700px;
   padding-left: 30px;
-  background: sandybrown;
+  background: rgba(90, 0, 60, 0.8);
+
 }
 .logo {
   width: 100px;
