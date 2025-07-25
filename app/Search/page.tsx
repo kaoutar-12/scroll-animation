@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "@/styles/search.css";
 import Image from "next/image";
+import "@/styles/search.css";
 
 export type SearchResult = {
   id: number;
@@ -11,7 +11,9 @@ export type SearchResult = {
   poster_path: string;
 };
 
-const TOTAL_PAGES_TO_FETCH = 3;
+const TOTAL_PAGES_TO_FETCH = 1;
+const COLUMNS = 5; // For layout
+const LOOP_COUNT = 20; // Controls how long the loop scrolls
 
 const SearchPage = () => {
   const [query, setQuery] = useState("");
@@ -28,7 +30,6 @@ const SearchPage = () => {
           },
         })
       );
-
       const responses = await Promise.all(requests);
       const allResults = responses.flatMap((res) => res.data.results || []);
       setInitialMovies(allResults);
@@ -49,7 +50,6 @@ const SearchPage = () => {
           },
         })
       );
-
       const responses = await Promise.all(requests);
       const allResults = responses.flatMap((res) => res.data.results || []);
       setResults(allResults);
@@ -67,7 +67,7 @@ const SearchPage = () => {
       if (query.trim()) {
         fetchMovies(query);
       } else {
-        setResults([]); // Clear results to show initial movies again
+        setResults([]);
       }
     }, 500);
 
@@ -75,6 +75,10 @@ const SearchPage = () => {
   }, [query]);
 
   const moviesToShow = query.trim() ? results : initialMovies;
+
+  const repeatedMovies = !query.trim()
+    ? Array.from({ length: LOOP_COUNT }, () => moviesToShow).flat()
+    : moviesToShow;
 
   return (
     <div className="search-page">
@@ -87,19 +91,18 @@ const SearchPage = () => {
         />
       </div>
 
-      <div className="search-container">
-        {moviesToShow.length > 0 ? (
-          moviesToShow.map((movie) => (
-            <div key={movie.id} className="movie-card">
+      <div className={`search-container ${!query.trim() ? "scrolling" : ""}`}>
+        {repeatedMovies.length > 0 ? (
+          repeatedMovies.map((movie, index) => (
+            <div key={`${movie.id}-${index}`} className="movie-card">
               <Image
                 src={
                   movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                     : "/placeholder.png"
                 }
                 alt={movie.title || "movie poster"}
-                width={200}
-                height={300}
+                fill
               />
             </div>
           ))
