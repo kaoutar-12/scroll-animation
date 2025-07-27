@@ -8,10 +8,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10000;
   gap: 700px;
   padding-left: 30px;
-  background: rgba(90, 0, 60, 0.8);
 
 }
 .logo {

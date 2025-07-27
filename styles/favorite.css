@@ -9,6 +9,9 @@
   justify-content: center;
   align-items: center;
   gap: 15px;
+  position: fixed;
+  bottom: 0px;
+  z-index: 1000;
 }
 
 /* Add hover effect to .favorite only when it doesn't have the expanded class */
@@ -299,7 +302,7 @@
   height: 200px;
   transform: scale(1.1); /* Adjust the scale or size as needed */
   position: fixed;
-  z-index: 100;
+
   bottom: 70%;
 }
 
