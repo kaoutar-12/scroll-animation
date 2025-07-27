@@ -11,7 +11,7 @@ export type SearchResult = {
   poster_path: string;
 };
 
-const TOTAL_PAGES_TO_FETCH = 1;
+const TOTAL_PAGES_TO_FETCH = 5;
 const LOOP_COUNT = 20;
 
 const SearchPage = () => {
@@ -24,16 +24,20 @@ const SearchPage = () => {
       try {
         const responses = await Promise.all(
           Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
-            axios.get("https://api.themoviedb.org/3/movie/popular", {
-              params: { page: i + 1 },
+            axios.get("https://api.themoviedb.org/3/trending/all/day", {
+              params: {
+                page: i + 1,
+              
+              },
               headers: {
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`, // use backticks!
               },
             })
           )
         );
         const movies = responses.flatMap((res) => res.data.results || []);
         setInitialMovies(movies);
+        console.log("pop", movies);
       } catch (err) {
         console.error("Error fetching popular movies:", err);
       }
@@ -57,7 +61,7 @@ const SearchPage = () => {
       const responses = await Promise.all(
         Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
           axios.get("https://api.themoviedb.org/3/search/movie", {
-            params: { query: searchTerm, page: i + 1 },
+            params: { query: searchTerm, page: i + 1, include_adult: false },
             headers: {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
             },
@@ -65,6 +69,7 @@ const SearchPage = () => {
         )
       );
       const movies = responses.flatMap((res) => res.data.results || []);
+      console.log(movies);
       setResults(movies);
     } catch (err) {
       console.error("Error searching movies:", err);

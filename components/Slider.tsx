@@ -23,7 +23,7 @@ export const columns = 5;
 export const moviesPerColumn = 10;
 export const totalMovies = columns * moviesPerColumn;
 
-const scrollSpeeds = [1, 0.7, 1.4, 0.9, 1.2]; // Speed multipliers per column
+const scrollSpeeds = [1.3, 1, 1.4, 1, 1.2]; // Speed multipliers per column
 
 const Slider = ({ data }: { data: MovieResult[][] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
