@@ -33,7 +33,7 @@ export default function RootLayout({
           {/* Blurred Edges */}
           <div className="edge-blur left" />
           <div className="edge-blur right" />
-          <div className="edge-blur top" />
+          {/* <div className="edge-blur top" /> */}
           <div className="edge-blur bottom" />
           <div className="layout-content">{children}</div>
         </div>

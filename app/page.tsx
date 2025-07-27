@@ -51,7 +51,7 @@ export default function Home() {
   return (
     <div className="home">
       <Slider data={data} />
-      <Favorite />
+      {/* <Favorite /> */}
     </div>
   );
 }

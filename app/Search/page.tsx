@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import "@/styles/search.css";
+import { IoSearchSharp } from "react-icons/io5";
+
 
 export type SearchResult = {
   id: number;
@@ -27,7 +29,6 @@ const SearchPage = () => {
             axios.get("https://api.themoviedb.org/3/trending/all/day", {
               params: {
                 page: i + 1,
-              
               },
               headers: {
                 Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`, // use backticks!
@@ -84,12 +85,16 @@ const SearchPage = () => {
   return (
     <div className="search-page">
       <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search for movies..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <div className="search-bar-content">
+          <IoSearchSharp className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search for movies"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+
+        </div>
       </div>
 
       <div className={`search-container ${!isSearching ? "scrolling" : ""}`}>

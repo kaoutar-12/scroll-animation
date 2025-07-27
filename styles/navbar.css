@@ -8,6 +8,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 10000;
   gap: 700px;
   padding-left: 30px;
 
@@ -16,7 +17,7 @@
   width: 100px;
   height: 100%;
   /* background: pink; */
-  font-family: pacifico;
+  font-family: "Pacifico", cursive;
   color: #a0dcff;
   font-size: 33px;
   display: flex;
