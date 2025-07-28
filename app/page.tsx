@@ -6,7 +6,6 @@ import Slider, {
   moviesPerColumn,
   totalMovies,
 } from "../components/Slider";
-import Navbar from "@/components/Navbar";
 import Favorite from "@/components/Favorite";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -51,7 +50,7 @@ export default function Home() {
   return (
     <div className="home">
       <Slider data={data} />
-      {/* <Favorite /> */}
+      <Favorite />
     </div>
   );
 }
