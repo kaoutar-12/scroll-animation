@@ -6,13 +6,14 @@ import Slider, {
   moviesPerColumn,
   totalMovies,
 } from "../components/Slider";
+import Navbar from "@/components/Navbar";
 import Favorite from "@/components/Favorite";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
 export default function Home() {
   const [data, setData] = useState<MovieResult[][]>([]);
+  const [cards, setCards] = useState(Array(7).fill(null));
 
   const getData = async () => {
     try {
@@ -47,10 +48,18 @@ export default function Home() {
     getData();
   }, []);
 
+  const handleCardClick = (movie: MovieResult) => {
+    console.log("Card clicked:", movie);
+    // You can add more functionality here, like navigating to a details page
+    setCards((prev) => {
+      return [movie, ...prev];
+    });
+  };
+
   return (
     <div className="home">
-      <Slider data={data} />
-      <Favorite />
+      <Slider data={data} onCardClick={handleCardClick} />
+      <Favorite cards={cards} />
     </div>
   );
 }

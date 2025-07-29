@@ -25,7 +25,13 @@ export const totalMovies = columns * moviesPerColumn;
 
 const scrollSpeeds = [1.3, 1, 1.4, 1, 1.2]; // Speed multipliers per column
 
-const Slider = ({ data }: { data: MovieResult[][] }) => {
+const Slider = ({
+  data,
+  onCardClick,
+}: {
+  data: MovieResult[][];
+  onCardClick: (movie: MovieResult) => void;
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLUListElement[]>([]);
 
@@ -39,25 +45,35 @@ const Slider = ({ data }: { data: MovieResult[][] }) => {
   const animationFrameId = useRef<number | null>(null);
   const scrollSpeedRef = useRef(0);
 
-  const lerp = useCallback((v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t, []);
+  const lerp = useCallback(
+    (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t,
+    []
+  );
 
-  const dispose = useCallback((menu: HTMLUListElement, scroll: number, index: number) => {
-    const items = menu.querySelectorAll<HTMLElement>(".small-part");
-    const itemHeight = itemHeightRef.current;
-    const wrapHeight = wrapHeightRef.current;
-    const speed = scrollSpeeds[index] || 1;
+  const dispose = useCallback(
+    (menu: HTMLUListElement, scroll: number, index: number) => {
+      const items = menu.querySelectorAll<HTMLElement>(".small-part");
+      const itemHeight = itemHeightRef.current;
+      const wrapHeight = wrapHeightRef.current;
+      const speed = scrollSpeeds[index] || 1;
 
-    gsap.set(items, {
-      y: (i: number) => i * itemHeight + scroll * speed,
-      modifiers: {
-        y: (y: string) => {
-          const val = parseFloat(y);
-          const wrapped = gsap.utils.wrap(-itemHeight, wrapHeight - itemHeight, val);
-          return `${wrapped}px`;
+      gsap.set(items, {
+        y: (i: number) => i * itemHeight + scroll * speed,
+        modifiers: {
+          y: (y: string) => {
+            const val = parseFloat(y);
+            const wrapped = gsap.utils.wrap(
+              -itemHeight,
+              wrapHeight - itemHeight,
+              val
+            );
+            return `${wrapped}px`;
+          },
         },
-      },
-    });
-  }, []);
+      });
+    },
+    []
+  );
 
   const initGrid = useCallback(() => {
     if (!containerRef.current || !menuRef.current.length) return;
@@ -73,7 +89,9 @@ const Slider = ({ data }: { data: MovieResult[][] }) => {
     yRef.current = 0;
     oldScrollYRef.current = 0;
 
-    menuRef.current.forEach((menu, index) => dispose(menu, scrollYRef.current, index));
+    menuRef.current.forEach((menu, index) =>
+      dispose(menu, scrollYRef.current, index)
+    );
   }, [dispose]);
 
   const render = useCallback(() => {
@@ -136,7 +154,8 @@ const Slider = ({ data }: { data: MovieResult[][] }) => {
     resizeObserver.observe(container);
 
     return () => {
-      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+      if (animationFrameId.current)
+        cancelAnimationFrame(animationFrameId.current);
 
       container.removeEventListener("wheel", handleWheel);
       container.removeEventListener("touchstart", handleTouchStart);
@@ -148,7 +167,14 @@ const Slider = ({ data }: { data: MovieResult[][] }) => {
 
       resizeObserver.disconnect();
     };
-  }, [handleWheel, handleTouchStart, handleTouchMove, handleTouchEnd, render, initGrid]);
+  }, [
+    handleWheel,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+    render,
+    initGrid,
+  ]);
 
   return (
     <div className="container" ref={containerRef}>
@@ -156,10 +182,12 @@ const Slider = ({ data }: { data: MovieResult[][] }) => {
         <ul
           key={colIndex}
           className="column"
-          ref={(el) => {
-            if (el) menuRef.current[colIndex] = el;
+          ref={(el) => el && (menuRef.current[colIndex] = el)}
+          style={{
+            transform: `translateY(${
+              [-100, -60, -150, -30, -200][colIndex]
+            }px)`,
           }}
-          style={{ transform: `translateY(${[-100, -60, -150, -30, -200][colIndex]}px)` }}
         >
           <div className="column-content">
             {Array(5)
@@ -168,7 +196,7 @@ const Slider = ({ data }: { data: MovieResult[][] }) => {
               .map((movie, i) => (
                 <li key={`${movie.id}-${i}`} className="small-part">
                   <div className="card-container">
-                    <Card movie={movie} />
+                    <Card movie={movie} onCardClick={onCardClick} />
                   </div>
                 </li>
               ))}

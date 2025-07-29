@@ -2,16 +2,15 @@
 
 .navbar {
   width: 100vw;
-  height: 80px;
+  height: 100px;
   display: flex;
   align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10000;
-  gap: 700px;
+  gap: 100px;
   padding-left: 30px;
-
 }
 .logo {
   width: 100px;
@@ -26,6 +25,14 @@
   padding-left: 100px;
 }
 
+.nav-links {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
 .search {
   width: 70px;
   height: 70px;
@@ -35,7 +42,6 @@
   justify-content: center;
   align-items: center;
   position: relative;
-
 }
 
 .search .icon {
@@ -46,7 +52,48 @@
   top: 20px;
   right: 20px;
 }
+.refresh {
+  width: 70px;
+  height: 70px;
+  background: #a0dcff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.6s ease-in-out, width 0.6s ease-in-out;
+}
 
+.refresh-icon {
+  width: 30px;
+  height: 30px;
+  color: rgba(90, 0, 60, 1);
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  transition: all 0.6s ease-in-out;
+}
+
+.refresh-label {
+  opacity: 0;
+  white-space: nowrap;
+  color: rgba(90, 0, 60, 1);
+  font-weight: normal;
+  font-family: "Pacifico", cursive;
+  transition: opacity 0.4s ease, margin 0.4s ease;
+}
+
+.refresh:hover {
+  width: 300px;
+  border-radius: 99px;
+  cursor: pointer;
+}
+
+.refresh:hover .refresh-label {
+  opacity: 1;
+  margin-left: 40px;
+}
 
 .search .icon:hover {
   cursor: pointer;

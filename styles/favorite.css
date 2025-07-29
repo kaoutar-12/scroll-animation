@@ -11,7 +11,6 @@
   gap: 15px;
   position: fixed;
   bottom: 0px;
-  z-index: 1000;
 }
 
 /* Add hover effect to .favorite only when it doesn't have the expanded class */
@@ -236,7 +235,7 @@
 
 .namelist {
   width: 300px;
-  height: 50px;
+  height: 70px;
   background: transparent;
   border: solid 2px rgba(90, 0, 60, 1);
   display: flex;
@@ -302,7 +301,7 @@
   height: 200px;
   transform: scale(1.1); /* Adjust the scale or size as needed */
   position: fixed;
-
+  z-index: 12;
   bottom: 70%;
 }
 
@@ -312,7 +311,7 @@
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  z-index: 1;
+  z-index: 11;
   position: absolute;
   backface-visibility: hidden;
   transition: transform 0.8s;

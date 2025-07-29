@@ -4,11 +4,12 @@ import Image from "next/image";
 import "../styles/card.css";
 interface CardProps {
   movie: MovieResult;
+  onCardClick?: (movie: MovieResult) => void; // Optional click handler
 }
 
-const Card: React.FC<CardProps> = ({ movie }) => {
+const Card: React.FC<CardProps> = ({ movie, onCardClick }) => {
   return (
-    <div className="card">
+    <div className="card" onClick={() => onCardClick && onCardClick(movie)}>
       {movie.poster_path ? (
         <Image
           src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
