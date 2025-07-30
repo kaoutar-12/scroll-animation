@@ -50,9 +50,23 @@ export default function Home() {
 
   const handleCardClick = (movie: MovieResult) => {
     console.log("Card clicked:", movie);
-    // You can add more functionality here, like navigating to a details page
-    setCards((prev) => {
-      return [movie, ...prev];
+
+    setCards((prevCards) => {
+      // Check if movie is already in cards
+      const exists = prevCards.some((card) => card?.id === movie.id);
+      if (exists) {
+        console.log("Movie already added, ignoring.");
+        return prevCards; // no change
+      }
+
+      // Find first null (empty) index
+      const firstEmptyIndex = prevCards.findIndex((card) => card === null);
+      if (firstEmptyIndex === -1) return prevCards; // no space available
+
+      // Insert movie at first empty spot
+      const newCards = [...prevCards];
+      newCards[firstEmptyIndex] = movie;
+      return newCards;
     });
   };
 

@@ -1,4 +1,3 @@
-
 .favorite {
   width: 580px;
   height: 130px;
@@ -13,32 +12,27 @@
   bottom: 0px;
 }
 
-/* Add hover effect to .favorite only when it doesn't have the expanded class */
 .favorite:not(.expanded):hover {
-  width: 600px; /* Adjust this value as needed */
+  width: 600px;
 }
 
 .favorite:hover .fav-hr {
-  width: 70px; /* Optional: adjust width of hr on hover */
+  width: 70px;
 }
 
-/* Expanded state styles */
 .expanded {
-  width: 900px; 
-  height: 500px; 
-  background: lightcoral; 
+  width: 900px;
+  height: 500px;
+  background: lightcoral;
   position: fixed;
   bottom: 0;
   transition: all 0.4s ease;
 }
 
-/* Keep existing styles */
 .fav {
   width: 600px;
   height: 180px;
-  /* background: goldenrod; */
   position: fixed;
-
   bottom: -90px;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -52,9 +46,8 @@
 .text {
   font-family: "Oswald", sans-serif;
   font-weight: 600;
-  font-size: medium;
-  color: #A0DCFF;
   font-size: 20px;
+  color: #A0DCFF;
 }
 
 .fav-hr {
@@ -79,12 +72,12 @@
   align-items: center;
   gap: 10px;
 }
+
 .list-wrapper-big {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column-reverse;
-  /* gap: 10px; */
 }
 
 .list-fav {
@@ -98,16 +91,14 @@
   flex-direction: row;
 }
 
-.list-big{
-  width:100%;
-  height: 280px;
+.list-big {
+  width: 100%;
+  height: 230px;
   background: #A0DCFF;
   display: flex;
   justify-content: center;
   gap: 10px;
 }
-
-
 
 .liked {
   width: 70px;
@@ -117,15 +108,72 @@
   border: solid 2px red;
   border-radius: 10px;
 }
-/* .liked-big{
-  width:150px;
-  height: 190px;
-  background: black;
+
+/* Fixed Flip Structure */
+.liked-big {
+  width: 120px;
+  height: 170px;
   perspective: 1000px;
   border: solid 2px red;
   border-radius: 10px;
-} */
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
 
+.liked-big.expanded {
+  width: 150px;
+  height: 200px;
+  transform: scale(1.1);
+  position: fixed;
+  z-index: 12;
+  bottom: 70%;
+}
+
+/* Card inner wrapper */
+.card-inner-big {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Flip on hover */
+.liked-big:hover .card-inner-big {
+  transform: rotateY(180deg);
+}
+
+/* Card front and back */
+.card-front-big,
+.card-back-big {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  position: absolute;
+  backface-visibility: hidden;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 24px;
+  text-align: center;
+  padding: 10px;
+}
+
+.card-front-big {
+  background-color: lightblue;
+  z-index: 2;
+}
+
+.card-back-big {
+  background-color: coral;
+  color: white;
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+/* Old flip styles for small cards (keep if used elsewhere) */
 .card-front,
 .card-back {
   width: 100%;
@@ -135,20 +183,8 @@
   backface-visibility: hidden;
   transition: transform 0.8s;
 }
-/* .card-front-big,
-.card-back-big {
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  position: absolute;
-  backface-visibility: hidden;
-  transition: transform 0.8s;
-} */
 
 .card-front {
-  background-color: lightblue;
-}
-.card-front-big {
   background-color: lightblue;
 }
 
@@ -164,18 +200,6 @@
 .liked:hover .card-back {
   transform: rotateY(360deg);
 }
-.card-back-big {
-  background-color: coral;
-  transform: rotateY(180deg);
-}
-
-.liked-big:hover .card-front-big {
-  transform: rotateY(180deg);
-}
-
-.liked-big:hover .card-back-big {
-  transform: rotateY(360deg);
-}
 
 .expand {
   width: 36px;
@@ -186,19 +210,20 @@
   cursor: pointer;
   color: rgba(90, 0, 60, 1);
 }
-.content-wrapper{
+
+.content-wrapper {
   width: 100%;
   height: 300px;
 }
 
-.cards{
+.cards {
   width: 200px;
   height: 200px;
   background: transparent;
 }
 
-.empty-state{
-  width: 1000px;  
+.empty-state {
+  width: 1000px;
   height: 500px;
   background: #A0DCFF;
   border-radius: 10px;
@@ -207,16 +232,16 @@
   align-items: center;
   flex-direction: column;
   gap: 20px;
-  
 }
-.hr-expand{
+
+.hr-expand {
   width: 120px;
   border: none;
   border-top: 5px solid rgba(90, 0, 60, 1);
   border-radius: 10px;
 }
 
-.validate{
+.validate {
   width: 200px;
   height: 80px;
   background: rgba(90, 0, 60, 1);
@@ -227,10 +252,7 @@
   cursor: pointer;
   font-family: 'Bebas neue';
   font-size: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color:#A0DCFF;
+  color: #A0DCFF;
 }
 
 .namelist {
@@ -243,6 +265,7 @@
   align-items: center;
   border-radius: 20px;
 }
+
 .namelist input {
   width: 90%;
   height: 60%;
@@ -252,24 +275,45 @@
   font-family: 'Bebas neue';
   font-size: 36px;
   color: rgba(90, 0, 60, 1);
-  
 }
+
 .namelist input::placeholder {
   font-size: 36px;
   color: rgba(90, 0, 60, 1);
   font-family: 'Bebas neue';
 }
+
 .namelist input:focus {
   outline: none;
   border: none;
 }
 
-/* Dot styles */
+.validate-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.validate-button{
+  width: 200px;
+  height: 60px;
+  background: rgba(90, 0, 60, 1);
+  border-radius: 99px;
+  color: #A0DCFF;
+  font-family: 'Bebas neue';
+  font-size: 24px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
 .dots {
   display: flex;
   justify-content: center;
   gap: 10px;
-  /* margin-bottom: 20px; */
+  
 }
 
 .dot {
@@ -283,53 +327,4 @@
 
 .dot.active {
   background-color: #40a4de;
-}
-
-/* Big Card Styles */
-.liked-big {
-  width: 120px;
-  height: 170px;
-  /* background: black; */
-  perspective: 1000px;
-  border: solid 2px red;
-  border-radius: 10px;
-  transition: all 0.4s ease;
-}
-
-.liked-big.expanded {
-  width: 150px;
-  height: 200px;
-  transform: scale(1.1); /* Adjust the scale or size as needed */
-  position: fixed;
-  z-index: 12;
-  bottom: 70%;
-}
-
-/* Card front and back */
-.card-front-big,
-.card-back-big {
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  z-index: 11;
-  position: absolute;
-  backface-visibility: hidden;
-  transition: transform 0.8s;
-}
-
-.card-front-big {
-  background-color: lightblue;
-}
-
-.card-back-big {
-  background-color: coral;
-  transform: rotateY(180deg);
-}
-
-.liked-big:hover .card-front-big {
-  transform: rotateY(180deg);
-}
-
-.liked-big:hover .card-back-big {
-  transform: rotateY(360deg);
 }

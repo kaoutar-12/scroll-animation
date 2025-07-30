@@ -22,14 +22,20 @@ const BigCards: React.FC<BigCardsProps> = ({ cards }) => {
 
   return (
     <div className="list-wrapper-big">
-      <div className="dots">
-        {cards.map((_, index) => (
-          <div
-            key={index}
-            className={`dot ${selectedCard === index ? "active" : ""}`}
-            onClick={() => handleDotClick(index)}
-          ></div>
-        ))}
+      <div className="validate-container">
+        <div className="dots">
+          {cards.map((_, index) => (
+            <div
+              key={index}
+              className={`dot ${selectedCard === index ? "active" : ""}`}
+              onClick={() => handleDotClick(index)}
+            ></div>
+          ))}
+        </div>
+
+        <div>
+          <button className="validate-button">Validate</button>
+        </div>
       </div>
 
       <div className="list-big">
@@ -43,23 +49,21 @@ const BigCards: React.FC<BigCardsProps> = ({ cards }) => {
               }`}
               onClick={() => handleCardClick(index)}
             >
-              <div
-                className="card-front-big"
-                style={{ position: "relative", width: "100%", height: "100%" }}
-                id={`front-${index + 1}`}
-              >
-                <Image
-                  src={
-                    card
-                      ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
-                      : "/placeholder.png"
-                  }
-                  alt={`Card ${index + 1}`}
-                  loading="lazy"
-                  fill
-                />
+              <div className="card-inner-big">
+                <div className="card-front-big">
+                  <Image
+                    src={
+                      card
+                        ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
+                        : "/placeholder.png"
+                    }
+                    alt={`Card ${index + 1}`}
+                    loading="lazy"
+                    fill
+                  />
+                </div>
+                <div className="card-back-big">mabghitsh kbira</div>
               </div>
-              <div className="card-back-big">{index + 1}</div>
             </div>
           );
         })}
@@ -68,16 +72,30 @@ const BigCards: React.FC<BigCardsProps> = ({ cards }) => {
   );
 };
 
-const One: React.FC<{ toggleExpand: () => void }> = ({ toggleExpand }) => {
-  const likedItems = Array(7).fill(null);
+interface OneProps {
+  toggleExpand: () => void;
+  cards: MovieResult[];
+}
 
+const One: React.FC<OneProps> = ({ toggleExpand, cards }) => {
   return (
     <div className="list-wrapper">
       <div className="list-fav">
-        {likedItems.map((_, index) => (
+        {cards.map((card, index) => (
           <div key={index} className="liked">
-            <div className="card-front" id={`front-${index}`}></div>
-            <div className="card-back"> {index + 1}</div>
+            <div className="card-front" id={`front-${index}`}>
+              <Image
+                src={
+                  card
+                    ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
+                    : "/placeholder.png"
+                }
+                alt={`Card ${index + 1}`}
+                loading="lazy"
+                fill
+              />
+            </div>
+            <div className="card-back"> mabghitsh sghira</div>
           </div>
         ))}
       </div>
@@ -138,12 +156,12 @@ const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
               <div className="content-wrapper">
                 <BigCards cards={cards} />
               </div>
-              <div className="validate">VALIDATE</div>
             </div>
           ) : (
             <>
               <hr className="fav-hr" />
-              <One toggleExpand={toggleExpand} /> {/* Pass props to One */}
+              <One toggleExpand={toggleExpand} cards={cards} />{" "}
+              {/* Pass props to One */}
             </>
           )}
         </div>
