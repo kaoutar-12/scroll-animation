@@ -105,7 +105,6 @@
   height: 100px;
   position: relative;
   perspective: 1000px;
-  border: solid 2px red;
   border-radius: 10px;
 }
 
@@ -114,7 +113,6 @@
   width: 120px;
   height: 170px;
   perspective: 1000px;
-  border: solid 2px red;
   border-radius: 10px;
   transition: all 0.4s ease;
   cursor: pointer;
@@ -166,12 +164,7 @@
   z-index: 2;
 }
 
-.card-back-big {
-  background-color: coral;
-  color: white;
-  transform: rotateY(180deg);
-  z-index: 1;
-}
+
 
 /* Old flip styles for small cards (keep if used elsewhere) */
 .card-front,

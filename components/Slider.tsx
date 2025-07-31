@@ -182,7 +182,9 @@ const Slider = ({
         <ul
           key={colIndex}
           className="column"
-          ref={(el) => el && (menuRef.current[colIndex] = el)}
+          ref={(el) => {
+            if (el) menuRef.current[colIndex] = el;
+          }}
           style={{
             transform: `translateY(${
               [-100, -60, -150, -30, -200][colIndex]

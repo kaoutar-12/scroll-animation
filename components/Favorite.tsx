@@ -62,7 +62,19 @@ const BigCards: React.FC<BigCardsProps> = ({ cards }) => {
                     fill
                   />
                 </div>
-                <div className="card-back-big">mabghitsh kbira</div>
+                <div className="card-back-big">
+                  <Image
+                    src={
+                      card
+                        ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
+                        : "/placeholder.png"
+                    }
+                    alt={`Card ${index + 1}`}
+                    loading="lazy"
+                    fill
+                  />
+                  <button className="delete-button">DELETE</button>
+                </div>
               </div>
             </div>
           );
@@ -105,7 +117,7 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards }) => {
 };
 
 interface FavoriteProps {
-  cards: any[];
+  cards: MovieResult[];
 }
 const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
   const likedItemsCount = 7;
