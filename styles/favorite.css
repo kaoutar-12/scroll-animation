@@ -41,6 +41,7 @@
   align-items: center;
   flex-direction: column;
   gap: 15px;
+  z-index: 1000;
 }
 
 .text {
@@ -105,7 +106,7 @@
   height: 100px;
   position: relative;
   perspective: 1000px;
-  border-radius: 10px;
+  border-radius: 90px;
 }
 
 /* Fixed Flip Structure */
@@ -171,7 +172,6 @@
 .card-back {
   width: 100%;
   height: 100%;
-  border-radius: 10px;
   position: absolute;
   backface-visibility: hidden;
   transition: transform 0.8s;
@@ -179,20 +179,10 @@
 
 .card-front {
   background-color: lightblue;
+
 }
 
-.card-back {
-  background-color: coral;
-  transform: rotateY(180deg);
-}
 
-.liked:hover .card-front {
-  transform: rotateY(180deg);
-}
-
-.liked:hover .card-back {
-  transform: rotateY(360deg);
-}
 
 .expand {
   width: 36px;

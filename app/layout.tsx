@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { usePathname } from "next/navigation";
+import Favorite from "@/components/Favorite";
+import { FavoritesProvider, useFavorites } from "@/context/FavoriteContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,17 +28,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {isHomePage && <Navbar />}
-
-        <div className="layout-wrapper">
-          {/* Blurred Edges */}
-          <div className="edge-blur left" />
-          <div className="edge-blur right" />
-          {/* <div className="edge-blur top" /> */}
-          {/* <div className="edge-blur bottom" /> */}
-          <div className="layout-content">{children}</div>
-        </div>
+        <FavoritesProvider>
+          {isHomePage && <Navbar />}
+          
+          <div className="layout-wrapper">
+            <div className="edge-blur left" />
+            <div className="edge-blur right" />
+            <div className="layout-content">{children}</div>
+            <FavoritesDisplay />
+          </div>
+        </FavoritesProvider>
       </body>
     </html>
   );
+}
+
+// Separate component to use hooks
+function FavoritesDisplay() {
+  const { cards } = useFavorites();
+  return <Favorite cards={cards} />;
 }

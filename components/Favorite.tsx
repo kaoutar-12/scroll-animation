@@ -104,10 +104,11 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards }) => {
                 }
                 alt={`Card ${index + 1}`}
                 loading="lazy"
+                style={{ borderRadius: "10px" }}
                 fill
               />
             </div>
-            <div className="card-back"> mabghitsh sghira</div>
+            
           </div>
         ))}
       </div>
