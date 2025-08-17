@@ -1,30 +1,39 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import "@/styles/favorite.css";
-import { TbLayoutBottombarExpand } from "react-icons/tb";
+import { TbLayoutBottombarExpand, TbTrash } from "react-icons/tb";
 import { MovieResult } from "./Slider";
 import Image from "next/image";
+import { useFavorites } from "@/context/FavoriteContext";
 
 interface BigCardsProps {
   cards: MovieResult[];
+  onDelete: (id: number) => void;
 }
-const BigCards: React.FC<BigCardsProps> = ({ cards }) => {
-  console.log("BigCards rendered with cards:", cards);
+const BigCards: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
   const handleCardClick = (index: number) => {
-    setSelectedCard(index === selectedCard ? null : index); // Toggle expansion
+    setSelectedCard(index === selectedCard ? null : index);
   };
 
   const handleDotClick = (index: number) => {
-    setSelectedCard(index); // Select the card linked to the dot
+    setSelectedCard(index);
+  };
+
+  const handleDelete = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    onDelete(id);
+    if (selectedCard !== null && cards[selectedCard]?.id === id) {
+      setSelectedCard(null);
+    }
   };
 
   return (
     <div className="list-wrapper-big">
       <div className="validate-container">
         <div className="dots">
-          {cards.map((_, index) => (
+          {cards.filter(Boolean).map((_, index) => (
             <div
               key={index}
               className={`dot ${selectedCard === index ? "active" : ""}`}
@@ -40,7 +49,12 @@ const BigCards: React.FC<BigCardsProps> = ({ cards }) => {
 
       <div className="list-big">
         {cards.map((card, index) => {
-          console.log("Rendering card:", card);
+          if (!card) return (
+            <div key={index} className="liked-big empty">
+              <div className="empty-placeholder">+</div>
+            </div>
+          );
+          
           return (
             <div
               key={index}
@@ -53,27 +67,32 @@ const BigCards: React.FC<BigCardsProps> = ({ cards }) => {
                 <div className="card-front-big">
                   <Image
                     src={
-                      card
+                      card.poster_path
                         ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
                         : "/placeholder.png"
                     }
-                    alt={`Card ${index + 1}`}
-                    loading="lazy"
+                    alt={card.title || card.name || "Movie"}
                     fill
+                    sizes="(max-width: 768px) 100px, 150px"
                   />
                 </div>
                 <div className="card-back-big">
                   <Image
                     src={
-                      card
+                      card.poster_path
                         ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
                         : "/placeholder.png"
                     }
-                    alt={`Card ${index + 1}`}
-                    loading="lazy"
+                    alt={card.title || card.name || "Movie"}
                     fill
+                    sizes="(max-width: 768px) 100px, 150px"
                   />
-                  <button className="delete-button">DELETE</button>
+                  <button 
+                    className="delete-button"
+                    onClick={(e) => handleDelete(e, card.id)}
+                  >
+                    <TbTrash size={24} />
+                  </button>
                 </div>
               </div>
             </div>
@@ -87,29 +106,41 @@ const BigCards: React.FC<BigCardsProps> = ({ cards }) => {
 interface OneProps {
   toggleExpand: () => void;
   cards: MovieResult[];
+  onDelete: (id: number) => void;
 }
 
-const One: React.FC<OneProps> = ({ toggleExpand, cards }) => {
+const One: React.FC<OneProps> = ({ toggleExpand, cards, onDelete }) => {
+  const handleDelete = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    onDelete(id);
+  };
+
   return (
     <div className="list-wrapper">
       <div className="list-fav">
         {cards.map((card, index) => (
-          <div key={index} className="liked">
-            <div className="card-front" id={`front-${index}`}>
-              <Image
-                src={
-                  card
-                    ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
-                    : "/placeholder.png"
-                }
-                alt={`Card ${index + 1}`}
-                loading="lazy"
-                style={{ borderRadius: "10px" }}
-                fill
-              />
+          card && (
+            <div key={index} className="liked">
+              <div className="card-front" id={`front-${index}`}>
+                <Image
+                  src={
+                    card.poster_path
+                      ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
+                      : "/placeholder.png"
+                  }
+                  alt={card.title || card.name || "Movie"}
+                  fill
+                  sizes="70px"
+                />
+                <button 
+                  className="delete-button-small"
+                  onClick={(e) => handleDelete(e, card.id)}
+                >
+                  <TbTrash size={16} />
+                </button>
+              </div>
             </div>
-            
-          </div>
+          )
         ))}
       </div>
       <TbLayoutBottombarExpand className="expand" onClick={toggleExpand} />
@@ -118,33 +149,35 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards }) => {
 };
 
 interface FavoriteProps {
-  cards: MovieResult[];
+  cards: (MovieResult | null)[];
 }
 const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
-  const likedItemsCount = 7;
+  const { removeMovie } = useFavorites();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isVisible, setIsVisible] = useState(false); // Controls visibility for smooth transitions
+  const [isVisible, setIsVisible] = useState(false);
   const favoriteRef = useRef<HTMLDivElement>(null);
 
+  const nonNullCards = cards.filter(Boolean).length;
+  
   const toggleExpand = () => {
     if (!isExpanded) {
-      setIsExpanded(true); // Show div with expansion animation
-      setTimeout(() => setIsVisible(true), 100); // Delay to allow CSS transition
+      setIsExpanded(true);
+      setTimeout(() => setIsVisible(true), 100);
     } else {
-      setIsVisible(false); // Start hide animation
-      setTimeout(() => setIsExpanded(false), 400); // Remove from DOM after transition
+      setIsVisible(false);
+      setTimeout(() => setIsExpanded(false), 400);
     }
   };
 
-  // Handle click outside the component to close
+  const handleDelete = (id: number) => {
+    removeMovie(id);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        favoriteRef.current &&
-        !favoriteRef.current.contains(event.target as Node)
-      ) {
-        setIsVisible(false); // Start hide animation
-        setTimeout(() => setIsExpanded(false), 400); // Remove after the animation
+      if (favoriteRef.current && !favoriteRef.current.contains(event.target as Node)) {
+        setIsVisible(false);
+        setTimeout(() => setIsExpanded(false), 400);
       }
     };
 
@@ -156,25 +189,27 @@ const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
 
   return (
     <div className="fav" ref={favoriteRef}>
-      <div className="text">YOU HAVE {likedItemsCount} CHOICES</div>
+      <div className="text">YOU HAVE {nonNullCards} CHOICES</div>
       <div className={`favorite ${isExpanded ? "expanded" : ""}`}>
         <div className="col">
           {isExpanded ? (
             <div className={`empty-state ${isVisible ? "visible" : "hidden"}`}>
-              {/* Add more content here inside the expanded div */}
               <hr className="hr-expand" />
               <div className="namelist">
                 <input type="text" placeholder="NAME YOUR TOP" />
               </div>
               <div className="content-wrapper">
-                <BigCards cards={cards} />
+                <BigCards cards={cards} onDelete={handleDelete} />
               </div>
             </div>
           ) : (
             <>
               <hr className="fav-hr" />
-              <One toggleExpand={toggleExpand} cards={cards} />{" "}
-              {/* Pass props to One */}
+              <One 
+                toggleExpand={toggleExpand} 
+                cards={cards} 
+                onDelete={handleDelete} 
+              />
             </>
           )}
         </div>

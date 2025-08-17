@@ -117,6 +117,7 @@
   border-radius: 10px;
   transition: all 0.4s ease;
   cursor: pointer;
+  background: purple;
 }
 
 .liked-big.expanded {
@@ -138,9 +139,7 @@
 }
 
 /* Flip on hover */
-.liked-big:hover .card-inner-big {
-  transform: rotateY(180deg);
-}
+
 
 /* Card front and back */
 .card-front-big,
@@ -310,4 +309,25 @@
 
 .dot.active {
   background-color: #40a4de;
+}
+
+
+.delete-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: crimson;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  z-index: 5;
+}
+
+.delete-button:hover {
+  background: darkred;
 }

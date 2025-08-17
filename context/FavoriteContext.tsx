@@ -1,11 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useCallback } from "react";
 import { MovieResult } from "@/components/Slider";
 
 type FavoritesContextType = {
   cards: (MovieResult | null)[];
   addMovieToFavorites: (movie: MovieResult) => void;
+  removeMovie: (id: number) => void;
+  clearFavorites: () => void;
 };
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
@@ -13,7 +15,7 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(undefin
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [cards, setCards] = useState<(MovieResult | null)[]>(Array(7).fill(null));
 
-  const addMovieToFavorites = (movie: MovieResult) => {
+  const addMovieToFavorites = useCallback((movie: MovieResult) => {
     setCards(prev => {
       // Prevent duplicates
       const exists = prev.some(card => card?.id === movie.id);
@@ -27,10 +29,25 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       newCards[firstEmptyIndex] = movie;
       return newCards;
     });
-  };
+  }, []);
+
+  const removeMovie = useCallback((id: number) => {
+    setCards(prev => {
+      return prev.map(card => card?.id === id ? null : card);
+    });
+  }, []);
+
+  const clearFavorites = useCallback(() => {
+    setCards(Array(7).fill(null));
+  }, []);
 
   return (
-    <FavoritesContext.Provider value={{ cards, addMovieToFavorites }}>
+    <FavoritesContext.Provider value={{ 
+      cards, 
+      addMovieToFavorites, 
+      removeMovie,
+      clearFavorites
+    }}>
       {children}
     </FavoritesContext.Provider>
   );
