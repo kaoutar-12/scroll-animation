@@ -49,12 +49,13 @@ const BigCards: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
 
       <div className="list-big">
         {cards.map((card, index) => {
-          if (!card) return (
-            <div key={index} className="liked-big empty">
-              <div className="empty-placeholder">+</div>
-            </div>
-          );
-          
+          if (!card)
+            return (
+              <div key={index} className="liked-big empty">
+                <div className="empty-placeholder">+</div>
+              </div>
+            );
+
           return (
             <div
               key={index}
@@ -87,7 +88,7 @@ const BigCards: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
                     fill
                     sizes="(max-width: 768px) 100px, 150px"
                   />
-                  <button 
+                  <button
                     className="delete-button"
                     onClick={(e) => handleDelete(e, card.id)}
                   >
@@ -118,8 +119,8 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards, onDelete }) => {
   return (
     <div className="list-wrapper">
       <div className="list-fav">
-        {cards.map((card, index) => (
-          card && (
+        {cards.map((card, index) =>
+          card ? (
             <div key={index} className="liked">
               <div className="card-front" id={`front-${index}`}>
                 <Image
@@ -132,7 +133,7 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards, onDelete }) => {
                   fill
                   sizes="70px"
                 />
-                <button 
+                <button
                   className="delete-button-small"
                   onClick={(e) => handleDelete(e, card.id)}
                 >
@@ -140,8 +141,12 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards, onDelete }) => {
                 </button>
               </div>
             </div>
+          ) : (
+            <div key={index} className="liked empty-small">
+              <div className="empty-placeholder-small">+</div>
+            </div>
           )
-        ))}
+        )}
       </div>
       <TbLayoutBottombarExpand className="expand" onClick={toggleExpand} />
     </div>
@@ -158,7 +163,7 @@ const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
   const favoriteRef = useRef<HTMLDivElement>(null);
 
   const nonNullCards = cards.filter(Boolean).length;
-  
+
   const toggleExpand = () => {
     if (!isExpanded) {
       setIsExpanded(true);
@@ -175,7 +180,10 @@ const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (favoriteRef.current && !favoriteRef.current.contains(event.target as Node)) {
+      if (
+        favoriteRef.current &&
+        !favoriteRef.current.contains(event.target as Node)
+      ) {
         setIsVisible(false);
         setTimeout(() => setIsExpanded(false), 400);
       }
@@ -205,10 +213,10 @@ const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
           ) : (
             <>
               <hr className="fav-hr" />
-              <One 
-                toggleExpand={toggleExpand} 
-                cards={cards} 
-                onDelete={handleDelete} 
+              <One
+                toggleExpand={toggleExpand}
+                cards={cards}
+                onDelete={handleDelete}
               />
             </>
           )}
