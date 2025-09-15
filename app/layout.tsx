@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { usePathname } from "next/navigation";
 import Favorite from "@/components/Favorite";
 import { FavoritesProvider, useFavorites } from "@/context/FavoriteContext";
+import { MovieProvider } from "@/context/MovieContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,14 +30,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <FavoritesProvider>
-          {isHomePage && <Navbar />}
-          
-          <div className="layout-wrapper">
-            <div className="edge-blur left" />
-            <div className="edge-blur right" />
-            <div className="layout-content">{children}</div>
-            <FavoritesDisplay />
-          </div>
+          <MovieProvider>
+            {isHomePage && <Navbar />}
+
+            <div className="layout-wrapper">
+              <div className="edge-blur left" />
+              <div className="edge-blur right" />
+              <div className="layout-content">{children}</div>
+              <FavoritesDisplay />
+            </div>
+          </MovieProvider>
         </FavoritesProvider>
       </body>
     </html>
