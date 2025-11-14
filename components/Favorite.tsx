@@ -79,9 +79,7 @@ const ExpandedCardsView: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
         </button>
       </div>
 
-
-
-      {isValidate && <div className="validation-message">Validated!</div>}
+      {isValidate && <div className="validation-container">Validated!</div>}
 
       {/* Cards grid */}
       <div className="list-big">

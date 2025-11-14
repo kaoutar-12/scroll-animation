@@ -471,3 +471,19 @@
     font-size: 18px;
   }
 }
+
+.validation-container {
+  position: fixed;
+  top: 0;
+  left: 1;
+  transform: translateX(-100%);
+  transform: translateY(-100%);
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 10000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -32,7 +32,6 @@
 .card-back {
   transform: rotateY(180deg);
   /* Optional glow effect while visible */
-
 }
 
 /* Smooth flip animation */
