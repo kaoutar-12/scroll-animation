@@ -46,8 +46,12 @@ export default function RootLayout({
   );
 }
 
-// Separate component to use hooks
 function FavoritesDisplay() {
   const { cards } = useFavorites();
+  const pathname = usePathname();
+
+  // Don't show on /GeneratePost
+  if (pathname === "/GeneratePost") return null;
+
   return <Favorite cards={cards} />;
 }

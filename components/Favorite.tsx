@@ -2,28 +2,60 @@
 import React, { useState, useEffect, useRef } from "react";
 import "@/styles/favorite.css";
 import { TbLayoutBottombarExpand, TbTrash } from "react-icons/tb";
-import { MovieResult } from "./Slider";
 import Image from "next/image";
 import { useFavorites } from "@/context/FavoriteContext";
+
+// ============================================
+// TYPE DEFINITIONS
+// ============================================
+
+export interface MovieResult {
+  id: number;
+  title?: string;
+  name?: string;
+  poster_path?: string | null;
+}
 
 interface BigCardsProps {
   cards: MovieResult[];
   onDelete: (id: number) => void;
 }
-const BigCards: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
-  const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
+interface CompactViewProps {
+  toggleExpand: () => void;
+  cards: MovieResult[];
+  onDelete: (id: number) => void;
+}
+
+interface FavoriteProps {
+  cards: (MovieResult | null)[];
+}
+
+// ============================================
+// EXPANDED VIEW COMPONENT
+// Shows cards in larger format with flip animation
+// ============================================
+
+const ExpandedCardsView: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [isValidate, setIsValidate] = useState(false);
+
+  // Toggle card selection (expands the card)
   const handleCardClick = (index: number) => {
     setSelectedCard(index === selectedCard ? null : index);
   };
 
+  // Select card from dots navigation
   const handleDotClick = (index: number) => {
     setSelectedCard(index);
   };
 
+  // Delete card and deselect if it was selected
   const handleDelete = (e: React.MouseEvent, id: number) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent card click event
     onDelete(id);
+
+    // Deselect if the deleted card was selected
     if (selectedCard !== null && cards[selectedCard]?.id === id) {
       setSelectedCard(null);
     }
@@ -31,6 +63,7 @@ const BigCards: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
 
   return (
     <div className="list-wrapper-big">
+      {/* Top controls: dots navigation and validate button */}
       <div className="validate-container">
         <div className="dots">
           {cards.filter(Boolean).map((_, index) => (
@@ -38,24 +71,31 @@ const BigCards: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
               key={index}
               className={`dot ${selectedCard === index ? "active" : ""}`}
               onClick={() => handleDotClick(index)}
-            ></div>
+            />
           ))}
         </div>
-
-        <div>
-          <button className="validate-button">Validate</button>
-        </div>
+        <button onClick={() => setIsValidate(true)} className="validate-button">
+          Validate
+        </button>
       </div>
 
+
+
+      {isValidate && <div className="validation-message">Validated!</div>}
+
+      {/* Cards grid */}
       <div className="list-big">
         {cards.map((card, index) => {
-          if (!card)
+          // Show empty placeholder if no card
+          if (!card) {
             return (
               <div key={index} className="liked-big empty">
                 <div className="empty-placeholder">+</div>
               </div>
             );
+          }
 
+          // Show movie card with flip effect
           return (
             <div
               key={index}
@@ -65,36 +105,29 @@ const BigCards: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
               onClick={() => handleCardClick(index)}
             >
               <div className="card-inner-big">
-                <div className="card-front-big">
-                  <Image
-                    src={
-                      card.poster_path
-                        ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
-                        : "/placeholder.png"
-                    }
-                    alt={card.title || card.name || "Movie"}
-                    fill
-                    sizes="(max-width: 768px) 100px, 150px"
-                  />
-                </div>
-                <div className="card-back-big">
-                  <Image
-                    src={
-                      card.poster_path
-                        ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
-                        : "/placeholder.png"
-                    }
-                    alt={card.title || card.name || "Movie"}
-                    fill
-                    sizes="(max-width: 768px) 100px, 150px"
-                  />
+                {/* Front of card - shows poster */}
+                <div className="liked-big">
+                  <div className="card-front-big">
+                    <Image
+                      src={
+                        card.poster_path
+                          ? `https://image.tmdb.org/t/p/w300${card.poster_path}`
+                          : "/placeholder.png"
+                      }
+                      alt={card.title || card.name || "Movie"}
+                      fill
+                      sizes="(max-width: 768px) 100px, 150px"
+                    />
+                  </div>
                   <button
-                    className="delete-button"
+                    className="delete-big"
                     onClick={(e) => handleDelete(e, card.id)}
                   >
-                    <TbTrash size={24} />
+                    <TbTrash size={20} />
                   </button>
                 </div>
+
+                {/* Back of card - shows poster + delete button */}
               </div>
             </div>
           );
@@ -104,13 +137,16 @@ const BigCards: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
   );
 };
 
-interface OneProps {
-  toggleExpand: () => void;
-  cards: MovieResult[];
-  onDelete: (id: number) => void;
-}
+// ============================================
+// COMPACT VIEW COMPONENT
+// Shows cards in smaller format at bottom of screen
+// ============================================
 
-const One: React.FC<OneProps> = ({ toggleExpand, cards, onDelete }) => {
+const CompactCardsView: React.FC<CompactViewProps> = ({
+  toggleExpand,
+  cards,
+  onDelete,
+}) => {
   const handleDelete = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     onDelete(id);
@@ -118,6 +154,7 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards, onDelete }) => {
 
   return (
     <div className="list-wrapper">
+      {/* Small cards row */}
       <div className="list-fav">
         {cards.map((card, index) =>
           card ? (
@@ -133,13 +170,13 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards, onDelete }) => {
                   fill
                   sizes="70px"
                 />
-                <button
-                  className="delete-button-small"
-                  onClick={(e) => handleDelete(e, card.id)}
-                >
-                  <TbTrash size={16} />
-                </button>
               </div>
+              <button
+                className="delete-small"
+                onClick={(e) => handleDelete(e, card.id)}
+              >
+                <TbTrash size={20} />
+              </button>
             </div>
           ) : (
             <div key={index} className="liked empty-small">
@@ -148,36 +185,43 @@ const One: React.FC<OneProps> = ({ toggleExpand, cards, onDelete }) => {
           )
         )}
       </div>
+
+      {/* Expand button */}
       <TbLayoutBottombarExpand className="expand" onClick={toggleExpand} />
     </div>
   );
 };
 
-interface FavoriteProps {
-  cards: (MovieResult | null)[];
-}
+// ============================================
+// MAIN FAVORITE COMPONENT
+// Manages the favorite list with expand/collapse functionality
+// ============================================
+
 const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
   const { removeMovie } = useFavorites();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const favoriteRef = useRef<HTMLDivElement>(null);
 
-  const nonNullCards = cards.filter(Boolean).length;
-
+  // Toggle between compact and expanded views
   const toggleExpand = () => {
     if (!isExpanded) {
+      // Expand: show immediately, then fade in content
       setIsExpanded(true);
       setTimeout(() => setIsVisible(true), 100);
     } else {
+      // Collapse: fade out content, then hide
       setIsVisible(false);
       setTimeout(() => setIsExpanded(false), 400);
     }
   };
 
+  // Handle movie deletion
   const handleDelete = (id: number) => {
     removeMovie(id);
   };
 
+  // Close expanded view when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -197,23 +241,28 @@ const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
 
   return (
     <div className="fav" ref={favoriteRef}>
-      <div className="text">YOU HAVE {nonNullCards} CHOICES</div>
       <div className={`favorite ${isExpanded ? "expanded" : ""}`}>
         <div className="col">
           {isExpanded ? (
+            // EXPANDED VIEW: Shows larger cards with name input
             <div className={`empty-state ${isVisible ? "visible" : "hidden"}`}>
               <hr className="hr-expand" />
+
+              {/* Input for naming the favorites list */}
               <div className="namelist">
                 <input type="text" placeholder="NAME YOUR TOP" />
               </div>
+
+              {/* Large cards grid */}
               <div className="content-wrapper">
-                <BigCards cards={cards} onDelete={handleDelete} />
+                <ExpandedCardsView cards={cards} onDelete={handleDelete} />
               </div>
             </div>
           ) : (
+            // COMPACT VIEW: Shows small cards at bottom
             <>
               <hr className="fav-hr" />
-              <One
+              <CompactCardsView
                 toggleExpand={toggleExpand}
                 cards={cards}
                 onDelete={handleDelete}

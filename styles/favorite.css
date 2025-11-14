@@ -1,18 +1,39 @@
-.favorite {
-  width: 580px;
-  height: 130px;
-  border-radius: 15px;
-  background: linear-gradient(145deg, #90c4e8, #a0dcff);
+/* ============================================
+   MAIN CONTAINER - Fixed bottom position
+   ============================================ */
+
+.fav {
+  position: fixed;
+  bottom: -90px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 60px;
   display: flex;
-  transition: all 0.4s ease;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   gap: 15px;
-  position: fixed;
-  bottom: 10px;
-  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  z-index: 1;
+}
+
+/* ============================================
+   FAVORITE BOX - Compact & Expanded States
+   ============================================ */
+
+.favorite {
+  width: 600px;
+  height: 170px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #90c4e8, #a0dcff);
   border: 2px solid rgba(90, 0, 60, 0.3);
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 100px;
+  transition: all 0.4s ease;
 }
 
 .favorite:not(.expanded):hover {
@@ -24,30 +45,33 @@
   width: 70px;
 }
 
-.expanded {
+.favorite.expanded {
   width: 900px;
   height: 500px;
   background: linear-gradient(145deg, #90c4e8, #a0dcff);
-  position: fixed;
-  bottom: 10px;
-  transition: all 0.4s ease;
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
-  z-index: 1001;
 }
 
-.fav {
-  width: 600px;
-  height: 180px;
-  position: fixed;
-  bottom: -90px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 15px;
-  z-index: 1000;
+/* ============================================
+   DIVIDERS & TEXT
+   ============================================ */
+
+.fav-hr {
+  width: 50px;
+  border: none;
+  border-top: 5px solid rgba(90, 0, 60, 1);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s ease;
+  margin-bottom: 25px;
+}
+
+.hr-expand {
+  width: 120px;
+  border: none;
+  border-top: 5px solid rgba(90, 0, 60, 1);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .text {
@@ -59,14 +83,9 @@
   letter-spacing: 1px;
 }
 
-.fav-hr {
-  width: 50px;
-  border: none;
-  border-top: 5px solid rgba(90, 0, 60, 1);
-  border-radius: 10px;
-  transition: all 0.4s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
+/* ============================================
+   LAYOUT CONTAINERS
+   ============================================ */
 
 .col {
   display: flex;
@@ -81,6 +100,7 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 100%;
 }
 
 .list-wrapper-big {
@@ -90,27 +110,19 @@
   flex-direction: column-reverse;
 }
 
+/* ============================================
+   COMPACT VIEW - Small Cards
+   ============================================ */
+
 .list-fav {
   width: 500px;
   height: 100px;
   gap: 8px;
-  background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   padding: 5px;
-}
-
-.list-big {
-  width: 100%;
-  height: 230px;
-  background: rgba(160, 220, 255, 0.4);
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  padding: 10px;
-  border-radius: 12px;
 }
 
 .liked {
@@ -119,72 +131,80 @@
   position: relative;
   perspective: 1000px;
   border-radius: 12px;
-  transition: transform 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
 }
 
 .liked:hover {
   transform: translateY(-5px);
 }
 
-/* Fixed Flip Structure */
-.liked-big {
-  width: 120px;
-  height: 170px;
-  perspective: 1000px;
-  border-radius: 12px;
-  transition: all 0.4s ease;
-  cursor: pointer;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.liked-big.expanded {
-  width: 150px;
-  height: 200px;
-  transform: scale(1.1);
-  position: fixed;
-  z-index: 12;
-  bottom: 70%;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-}
-
-/* Card inner wrapper */
-.card-inner-big {
+.card-front {
   width: 100%;
   height: 100%;
-  position: relative;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
   border-radius: 12px;
   overflow: hidden;
 }
 
-/* Flip on hover */
-.liked-big:not(.expanded):hover .card-inner-big {
-  transform: rotateY(180deg);
+/* ============================================
+   EXPANDED VIEW - Large Cards with Flip
+   ============================================ */
+
+.list-big {
+  width: 100%;
+  background: rgba(160, 220, 255, 0.4);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
-/* Card front and back */
+.liked-big {
+  position: relative;
+  width: 120px;
+  height: 170px;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.card-inner-big {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: visible; /* ✅ allow delete button to show outside */
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+/* ============================================
+   CARD FACES - Front & Back
+   ============================================ */
+
 .card-front-big,
 .card-back-big {
   width: 100%;
   height: 100%;
   border-radius: 12px;
-  position: absolute;
-  backface-visibility: hidden;
   overflow: hidden;
+  backface-visibility: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
   font-family: "Bebas Neue", sans-serif;
   font-size: 24px;
   text-align: center;
-  padding: 10px;
 }
 
 .card-front-big {
   background-color: #a0dcff;
-  z-index: 2;
+  position: relative;
+  z-index: 1;
 }
 
 .card-back-big {
@@ -192,23 +212,115 @@
   transform: rotateY(180deg);
 }
 
-.expand {
-  width: 36px;
-  height: 36px;
+/* ============================================
+   EMPTY CARD PLACEHOLDERS
+   ============================================ */
+
+.empty-placeholder {
+  font-size: 40px;
+  color: rgba(90, 0, 60, 0.5);
+  font-weight: bold;
+  border: 2px dashed rgba(90, 0, 60, 0.5);
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  color: rgba(90, 0, 60, 1);
-  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.liked.empty-small {
+  width: 70px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px dashed rgba(90, 0, 60, 0.5);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+}
+
+.empty-placeholder-small {
+  font-size: 28px;
+  color: rgba(90, 0, 60, 0.5);
+}
+
+/* ============================================
+   BUTTONS - Delete & Expand
+   ============================================ */
+
+/* ✅ Updated delete-big to behave like delete-small */
+.delete-big {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: rgba(220, 20, 60, 0.9);
+  color: white;
+  border: none;
   border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  transition: all 0.3s ease;
+}
+
+.delete-big:hover {
+  background: rgba(180, 0, 30, 1);
+  transform: scale(1.2);
+}
+
+/* Small delete button */
+.delete-small {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: rgba(220, 20, 60, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.delete-small:hover {
+  background: rgba(180, 0, 30, 1);
+  transform: scale(1.2);
+}
+
+/* Expand button */
+.expand {
+  width: 36px;
+  height: 36px;
+  color: rgba(90, 0, 60, 1);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: all 0.3s ease;
 }
 
 .expand:hover {
   transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.9);
 }
+
+/* ============================================
+   EXPANDED VIEW CONTENT
+   ============================================ */
 
 .content-wrapper {
   width: 100%;
@@ -221,47 +333,26 @@
   height: 500px;
   background: linear-gradient(145deg, #90c4e8, #a0dcff);
   border-radius: 15px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   gap: 20px;
   padding: 20px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.hr-expand {
-  width: 120px;
-  border: none;
-  border-top: 5px solid rgba(90, 0, 60, 1);
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.validate {
-  width: 200px;
-  height: 80px;
-  background: rgba(90, 0, 60, 1);
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  font-family: 'Bebas neue';
-  font-size: 36px;
-  color: #A0DCFF;
-}
-
+/* Name input */
 .namelist {
   width: 300px;
   height: 70px;
   background: rgba(255, 255, 255, 0.3);
   border: solid 2px rgba(90, 0, 60, 1);
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .namelist input {
@@ -270,21 +361,24 @@
   border: none;
   background: transparent;
   text-align: center;
-  font-family: 'Bebas neue';
+  font-family: "Bebas neue", sans-serif;
   font-size: 36px;
   color: rgba(90, 0, 60, 1);
 }
 
 .namelist input::placeholder {
+  font-family: "Bebas neue", sans-serif;
   font-size: 36px;
   color: rgba(90, 0, 60, 0.7);
-  font-family: 'Bebas neue';
 }
 
 .namelist input:focus {
   outline: none;
-  border: none;
 }
+
+/* ============================================
+   VALIDATION CONTROLS
+   ============================================ */
 
 .validate-container {
   display: flex;
@@ -295,24 +389,24 @@
   padding: 10px;
 }
 
-.validate-button{
+.validate-button {
   width: 200px;
   height: 60px;
   background: linear-gradient(to bottom, #5a003c, #3a0026);
+  color: #a0dcff;
+  border: none;
   border-radius: 99px;
-  color: #A0DCFF;
-  font-family: 'Bebas neue';
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-family: "Bebas neue", sans-serif;
   font-size: 24px;
   cursor: pointer;
-  border: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .validate-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   background: linear-gradient(to bottom, #6a004c, #4a0036);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
 }
 
 .dots {
@@ -327,9 +421,9 @@
   height: 15px;
   background-color: rgba(90, 0, 60, 1);
   border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .dot.active {
@@ -337,117 +431,19 @@
   transform: scale(1.2);
 }
 
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
 
-.delete-button {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(220, 20, 60, 0.9);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease;
-  z-index: 20;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-}
-
-.delete-button:hover {
-  background: rgba(180, 0, 30, 1);
-  transform: translateX(-50%) scale(1.1);
-}
-
-.delete-button-small {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: rgba(220, 20, 60, 0.9);
-  color: white;
-  border: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease;
-  z-index: 10;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.delete-button-small:hover {
-  background: rgba(180, 0, 30, 1);
-  transform: scale(1.2);
-}
-
-/* Empty placeholder style */
-.liked-big.empty {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px dashed rgba(90, 0, 60, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: default;
-}
-
-.empty-placeholder {
-  font-size: 40px;
-  color: rgba(90, 0, 60, 0.5);
-  font-weight: bold;
-}
-
-/* Empty small placeholder style */
-.liked.empty-small {
-  width: 70px;
-  height: 100px;
-  background: rgba(255, 255, 255, 0.2);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px;
-  border: 2px dashed rgba(90, 0, 60, 0.5);
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
-}
-
-.empty-placeholder-small {
-  font-size: 28px;
-  color: rgba(90, 0, 60, 0.5);
-}
-
-/* Flip animation for expanded view */
-.liked-big.expanded .card-inner-big {
-  transform: rotateY(180deg);
-}
-
-/* Responsive adjustments */
 @media (max-width: 950px) {
   .favorite.expanded {
     width: 95vw;
     max-width: 800px;
     height: 450px;
   }
-  
+
   .list-big {
     height: 200px;
-  }
-  
-  .liked-big {
-    width: 100px;
-    height: 150px;
-  }
-  
-  .liked-big.expanded {
-    width: 130px;
-    height: 180px;
   }
 }
 
@@ -456,21 +452,21 @@
     width: 90vw;
     max-width: 500px;
   }
-  
+
   .favorite.expanded {
     height: 400px;
   }
-  
+
   .list-fav {
     width: 90vw;
     max-width: 450px;
   }
-  
+
   .liked {
     width: 60px;
     height: 90px;
   }
-  
+
   .text {
     font-size: 18px;
   }

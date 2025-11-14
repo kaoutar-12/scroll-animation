@@ -9,7 +9,7 @@ import { useMovieContext } from "@/context/MovieContext";
 interface NavbarProps {
   onRefresh?: () => void;
 }
-const Navbar: React.FC<NavbarProps> = ({ onRefresh }) => {
+const Navbar: React.FC<NavbarProps> = ({ }) => {
   const { loadMovies } = useMovieContext();
 
   return (

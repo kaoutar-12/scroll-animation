@@ -7,6 +7,8 @@ import "@/styles/search.css";
 import { IoSearchSharp } from "react-icons/io5";
 import { MovieResult } from "@/components/Slider";
 import { useFavorites } from "@/context/FavoriteContext";
+import { IoIosArrowBack } from "react-icons/io";
+
 
 export type SearchResult = {
   id: number;
@@ -64,10 +66,10 @@ const SearchPage = () => {
       const responses = await Promise.all(
         Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
           axios.get("https://api.themoviedb.org/3/search/multi", {
-            params: { 
-              query: searchTerm, 
-              page: i + 1, 
-              include_adult: false 
+            params: {
+              query: searchTerm,
+              page: i + 1,
+              include_adult: false,
             },
             headers: {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
@@ -87,7 +89,7 @@ const SearchPage = () => {
       id: movie.id,
       title: movie.title || movie.name || "Untitled",
       poster_path: movie.poster_path,
-      name: movie.name || ""
+      name: movie.name || "",
     };
     addMovieToFavorites(movieResult);
   };
@@ -99,23 +101,30 @@ const SearchPage = () => {
 
   return (
     <div className="search-page">
-      <div className="search-bar">
-        <div className="search-bar-content">
-          <IoSearchSharp className="search-icon" />
-          <input
-            type="text"
-            placeholder="Search for movies or shows"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+      <div className="search-header">
+        <div className="go-back">
+          <a href="/" className="back-link">
+            <IoIosArrowBack className="back-icon" />
+          </a>
+        </div>
+        <div className="search-bar">
+          <div className="search-bar-content">
+            <IoSearchSharp className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search for movies or shows"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
       <div className={`search-container ${!isSearching ? "scrolling" : ""}`}>
         {moviesToDisplay.length > 0 ? (
           moviesToDisplay.map((movie, index) => (
-            <div 
-              key={`${movie.id}-${index}`} 
+            <div
+              key={`${movie.id}-${index}`}
               className="movie-card-search"
               onClick={() => handleCardClick(movie)}
             >
@@ -128,7 +137,7 @@ const SearchPage = () => {
                 alt={movie.title || movie.name || "Untitled"}
                 width={200}
                 height={300}
-                style={{ width: '100%', height: 'auto' }}
+                style={{ width: "100%", height: "auto" }}
               />
             </div>
           ))
