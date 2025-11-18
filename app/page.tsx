@@ -5,11 +5,13 @@ import Navbar from "@/components/Navbar";
 import Favorite from "@/components/Favorite";
 import { useFavorites } from "@/context/FavoriteContext";
 import { useMovieContext } from "@/context/MovieContext";
+import SearchPage from "@/components/Search";
 
 export default function Home() {
   const { addMovieToFavorites, cards } = useFavorites();
   const { data, getData } = useMovieContext();
   const [isValidate, setIsValidate] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     getData(1);
@@ -17,11 +19,14 @@ export default function Home() {
 
   return (
     <div className="home">
-      {!isValidate && <Navbar />}
+      {!isValidate && !isSearchOpen && (
+        <Navbar setIsSearchOpen={setIsSearchOpen} />
+      )}
 
       <div className="layout-wrapper">
         <div className="layout-content">
-          {!isValidate && (
+          {isSearchOpen && <SearchPage setIsSearchOpen={setIsSearchOpen} />}
+          {!isValidate && !isSearchOpen && (
             <Slider data={data} onCardClick={addMovieToFavorites} />
           )}
         </div>

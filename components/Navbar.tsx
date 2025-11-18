@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import "../styles/navbar.css";
 import { CgSearch } from "react-icons/cg";
 import { MdOutlineRefresh } from "react-icons/md";
@@ -8,8 +7,9 @@ import { useMovieContext } from "@/context/MovieContext";
 
 interface NavbarProps {
   onRefresh?: () => void;
+  setIsSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const Navbar: React.FC<NavbarProps> = ({ }) => {
+const Navbar: React.FC<NavbarProps> = ({ setIsSearchOpen }) => {
   const { loadMovies } = useMovieContext();
 
   return (
@@ -19,9 +19,9 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
       </div>
       <div className="nav-links">
         <div className="search">
-          <Link className="search-inside" href="/Search">
+          <div className="search-inside" onClick={() => setIsSearchOpen(true)}>
             <CgSearch className="icon" />
-          </Link>
+          </div>
         </div>
         <div className="refresh" onClick={loadMovies}>
           <MdOutlineRefresh className="refresh-icon" />
