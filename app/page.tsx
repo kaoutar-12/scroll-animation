@@ -1,12 +1,15 @@
 "use client";
 import Slider from "@/components/Slider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Favorite from "@/components/Favorite";
 import { useFavorites } from "@/context/FavoriteContext";
 import { useMovieContext } from "@/context/MovieContext";
 
 export default function Home() {
-  const { addMovieToFavorites } = useFavorites();
+  const { addMovieToFavorites, cards } = useFavorites();
   const { data, getData } = useMovieContext();
+  const [isValidate, setIsValidate] = useState(false);
 
   useEffect(() => {
     getData(1);
@@ -14,7 +17,20 @@ export default function Home() {
 
   return (
     <div className="home">
-      <Slider data={data} onCardClick={addMovieToFavorites} />
+      {!isValidate && <Navbar />}
+
+      <div className="layout-wrapper">
+        <div className="layout-content">
+          {!isValidate && (
+            <Slider data={data} onCardClick={addMovieToFavorites} />
+          )}
+        </div>
+        <Favorite
+          isValidate={isValidate}
+          setIsValidate={setIsValidate}
+          cards={cards}
+        />
+      </div>
     </div>
   );
 }

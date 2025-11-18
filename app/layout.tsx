@@ -23,35 +23,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const isHomePage = pathname === "/";
-
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <FavoritesProvider>
           <MovieProvider>
-            {isHomePage && <Navbar />}
-
             <div className="layout-wrapper">
               <div className="edge-blur left" />
               <div className="edge-blur right" />
               <div className="layout-content">{children}</div>
-              <FavoritesDisplay />
             </div>
           </MovieProvider>
         </FavoritesProvider>
       </body>
     </html>
   );
-}
-
-function FavoritesDisplay() {
-  const { cards } = useFavorites();
-  const pathname = usePathname();
-
-  // Don't show on /GeneratePost
-  if (pathname === "/GeneratePost") return null;
-
-  return <Favorite cards={cards} />;
 }

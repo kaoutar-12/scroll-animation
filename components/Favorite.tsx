@@ -4,6 +4,7 @@ import "@/styles/favorite.css";
 import { TbLayoutBottombarExpand, TbTrash } from "react-icons/tb";
 import Image from "next/image";
 import { useFavorites } from "@/context/FavoriteContext";
+import GeneratePost from "./GeneratePost";
 
 // ============================================
 // TYPE DEFINITIONS
@@ -19,6 +20,8 @@ export interface MovieResult {
 interface BigCardsProps {
   cards: MovieResult[];
   onDelete: (id: number) => void;
+  isValidate: boolean;
+  setIsValidate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface CompactViewProps {
@@ -29,6 +32,8 @@ interface CompactViewProps {
 
 interface FavoriteProps {
   cards: (MovieResult | null)[];
+  isValidate: boolean;
+  setIsValidate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // ============================================
@@ -36,18 +41,17 @@ interface FavoriteProps {
 // Shows cards in larger format with flip animation
 // ============================================
 
-const ExpandedCardsView: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
+const ExpandedCardsView: React.FC<BigCardsProps> = ({
+  cards,
+  onDelete,
+  isValidate,
+  setIsValidate,
+}) => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
-  const [isValidate, setIsValidate] = useState(false);
 
   // Toggle card selection (expands the card)
   const handleCardClick = (index: number) => {
     setSelectedCard(index === selectedCard ? null : index);
-  };
-
-  // Select card from dots navigation
-  const handleDotClick = (index: number) => {
-    setSelectedCard(index);
   };
 
   // Delete card and deselect if it was selected
@@ -63,23 +67,17 @@ const ExpandedCardsView: React.FC<BigCardsProps> = ({ cards, onDelete }) => {
 
   return (
     <div className="list-wrapper-big">
-      {/* Top controls: dots navigation and validate button */}
       <div className="validate-container">
-        <div className="dots">
-          {cards.filter(Boolean).map((_, index) => (
-            <div
-              key={index}
-              className={`dot ${selectedCard === index ? "active" : ""}`}
-              onClick={() => handleDotClick(index)}
-            />
-          ))}
-        </div>
         <button onClick={() => setIsValidate(true)} className="validate-button">
           Validate
         </button>
       </div>
 
-      {isValidate && <div className="validation-container">Validated!</div>}
+      {isValidate && (
+        <div className="validation-container">
+          <GeneratePost />
+        </div>
+      )}
 
       {/* Cards grid */}
       <div className="list-big">
@@ -195,7 +193,11 @@ const CompactCardsView: React.FC<CompactViewProps> = ({
 // Manages the favorite list with expand/collapse functionality
 // ============================================
 
-const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
+const Favorite: React.FC<FavoriteProps> = ({
+  cards,
+  isValidate,
+  setIsValidate,
+}) => {
   const { removeMovie } = useFavorites();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -253,7 +255,12 @@ const Favorite: React.FC<FavoriteProps> = ({ cards }) => {
 
               {/* Large cards grid */}
               <div className="content-wrapper">
-                <ExpandedCardsView cards={cards} onDelete={handleDelete} />
+                <ExpandedCardsView
+                  cards={cards}
+                  onDelete={handleDelete}
+                  setIsValidate={setIsValidate}
+                  isValidate={isValidate}
+                />
               </div>
             </div>
           ) : (

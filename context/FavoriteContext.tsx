@@ -13,7 +13,7 @@ type FavoritesContextType = {
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [cards, setCards] = useState<(MovieResult | null)[]>(Array(7).fill(null));
+  const [cards, setCards] = useState<(MovieResult | null)[]>(Array(10).fill(null));
 
   const addMovieToFavorites = useCallback((movie: MovieResult) => {
     setCards(prev => {
@@ -38,7 +38,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clearFavorites = useCallback(() => {
-    setCards(Array(7).fill(null));
+    setCards(Array(10).fill(null));
   }, []);
 
   return (

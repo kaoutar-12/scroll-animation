@@ -22,8 +22,8 @@
    ============================================ */
 
 .favorite {
-  width: 600px;
-  height: 170px;
+  width: 950px;
+  height: 150px;
   border-radius: 15px;
   background: linear-gradient(145deg, #90c4e8, #a0dcff);
   border: 2px solid rgba(90, 0, 60, 0.3);
@@ -34,10 +34,11 @@
   position: fixed;
   bottom: 100px;
   transition: all 0.4s ease;
+  padding-bottom: 20px;
 }
 
 .favorite:not(.expanded):hover {
-  width: 600px;
+  width: 980px;
   background: linear-gradient(145deg, #80b4d8, #90ccef);
 }
 
@@ -46,10 +47,9 @@
 }
 
 .favorite.expanded {
-  width: 900px;
+  width: 1600px;
   height: 500px;
-  background: linear-gradient(145deg, #90c4e8, #a0dcff);
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+
 }
 
 /* ============================================
@@ -108,6 +108,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column-reverse;
+  gap: 30px;
 }
 
 /* ============================================
@@ -115,7 +116,7 @@
    ============================================ */
 
 .list-fav {
-  width: 500px;
+  width: 100%;
   height: 100px;
   gap: 8px;
   display: flex;
@@ -126,7 +127,7 @@
 }
 
 .liked {
-  width: 70px;
+  width: 80px;
   height: 100px;
   position: relative;
   perspective: 1000px;
@@ -152,7 +153,6 @@
 
 .list-big {
   width: 100%;
-  background: rgba(160, 220, 255, 0.4);
   border-radius: 12px;
   display: flex;
   justify-content: center;
@@ -161,8 +161,8 @@
 
 .liked-big {
   position: relative;
-  width: 120px;
-  height: 170px;
+  width: 140px;
+  height: 180px;
   z-index: 0;
   display: flex;
   justify-content: center;
@@ -231,7 +231,7 @@
 }
 
 .liked.empty-small {
-  width: 70px;
+  width: 80px;
   height: 100px;
   background: rgba(255, 255, 255, 0.2);
   border: 2px dashed rgba(90, 0, 60, 0.5);
@@ -329,11 +329,9 @@
 }
 
 .empty-state {
-  width: 1000px;
-  height: 500px;
+  width: 1600px;
   background: linear-gradient(145deg, #90c4e8, #a0dcff);
   border-radius: 15px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -480,9 +478,7 @@
   transform: translateY(-100%);
   width: 100vw;
   height: 100vh;
-  background: #000;
   z-index: 10000;
-  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
