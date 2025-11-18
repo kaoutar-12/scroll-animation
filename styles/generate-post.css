@@ -2,25 +2,26 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: end;
   flex-direction: column;
+  padding-bottom: 100px;
   gap: 80px;
 }
 
-.bg-1{
+.bg-1 {
   background: #870014;
 }
 
-.bg-0{
+.bg-0 {
   background: #ffeb7d;
 }
 
-.bg-2{
+.bg-2 {
   background: #5a003c;
 }
 
-.selected{
+.selected {
   transform: scale(1.1);
   transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -29,7 +30,7 @@
   width: 50%;
   height: 55%;
   display: flex;
-  gap: 30px;
+  gap: 40px;
   justify-content: center;
 }
 .post-container-middle {
@@ -44,7 +45,7 @@
   align-items: center;
   flex-direction: column;
   border: 1px solid #ffeb7d;
-  border-radius: 12px;
+  border-radius: 20px;
   gap: 10px;
 }
 
@@ -60,7 +61,7 @@
   align-items: center;
   flex-direction: column;
   border: 1px solid #870014;
-  border-radius: 12px;
+  border-radius: 20px;
   gap: 10px;
 }
 .post-container-right {
@@ -75,7 +76,7 @@
   align-items: center;
   flex-direction: column;
   border: 1px solid #5a003c;
-  border-radius: 12px;
+  border-radius: 20px;
   gap: 10px;
 }
 
@@ -117,8 +118,7 @@
   font-family: "Alfa Slab One", serif;
 }
 
-
-.save-button-container{
+.save-button-container {
   width: 200px;
   height: 60px;
   display: flex;
@@ -129,7 +129,7 @@
   cursor: pointer;
 }
 
-.save-button{
+.save-button {
   width: 100%;
   height: 100%;
   color: black;
@@ -155,5 +155,81 @@
 }
 .button-bg-2 {
   background: #9cd1f5;
-  color: #5a003c; 
+  color: #5a003c;
+}
+
+.choises-container {
+  width: 50%;
+  height: 70px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+
+  align-items: center;
+}
+
+.choises-container button {
+  height: 70%;
+  padding: 0 25px;
+  border: none;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.post-type-container {
+  width: 50%;
+  height: 55%;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+}
+
+.post-type-container-middle {
+  width: 32%;
+  height: 65%;
+  background-image: url("/cinverse-red.png");
+  background-size: cover; /* covers the div nicely */
+  background-position: center; /* centers the image */
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid #ffeb7d;
+  border-radius: 20px;
+  gap: 10px;
+}
+.post-type-container-left {
+  width: 32%;
+  height: 65%;
+  background-image: url("/cinverse-yellow.png");
+  background-size: cover; /* covers the div nicely */
+  background-position: center; /* centers the image */
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid #870014;
+  border-radius: 20px;
+  gap: 10px;
+}
+.post-type-container-right {
+  width: 32%;
+  height: 65%;
+  background-image: url("/cinverse-blue.png");
+  background-size: cover; /* covers the div nicely */
+  background-position: center; /* centers the image */
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid #5a003c;
+  border-radius: 20px;
+  gap: 10px;
 }
