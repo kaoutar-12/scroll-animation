@@ -8,13 +8,9 @@ import React, {
   ReactNode,
 } from "react";
 import axios from "axios";
-import {
-  MovieResult,
-  MovieApiResponse,
-  columns,
-  moviesPerColumn,
-  totalMovies,
-} from "@/components/Slider";
+import { MovieApiResponse, MovieResult } from "@/next-types";
+import { columns, moviesPerColumn, totalMovies } from "@/hooks/useSliderAnimation";
+
 
 interface MovieContextType {
   data: MovieResult[][];

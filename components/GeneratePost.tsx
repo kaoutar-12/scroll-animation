@@ -13,18 +13,18 @@ const Page = () => {
   const [selectedPost, setSelectedPost] = React.useState<number>(2);
   const [typePost, setTypePost] = React.useState<string>("story");
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
-  
+
   // Refs for the downloadable containers
   const storyRefs = useRef<(HTMLDivElement | null)[]>([null, null, null]);
   const postRefs = useRef<(HTMLDivElement | null)[]>([null, null, null]);
 
   const handleDownload = async () => {
     setIsDownloading(true);
-    
+
     try {
       // Get the appropriate ref based on current type and selected post
       let targetElement: HTMLDivElement | null = null;
-      
+
       if (typePost === "story") {
         // Map selectedPost index to ref array (1->0, 0->1, 2->2)
         const refIndex = selectedPost === 1 ? 0 : selectedPost === 0 ? 1 : 2;
@@ -44,7 +44,6 @@ const Page = () => {
         quality: 1,
         pixelRatio: 2, // Higher quality
         cacheBust: true,
-        
       });
 
       // Create download link
@@ -52,7 +51,6 @@ const Page = () => {
       link.download = `${typePost}-${selectedPost}-${Date.now()}.png`;
       link.href = dataUrl;
       link.click();
-      
     } catch (error) {
       console.error("Error downloading image:", error);
     } finally {
@@ -82,7 +80,7 @@ const Page = () => {
         />
       )}
 
-      {typePost === "carousel" && <div>hello carousel</div>}
+    
 
       <DownloadButton
         selectedPost={selectedPost}

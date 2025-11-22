@@ -1,19 +1,23 @@
 import React from "react";
-import { MovieResult } from "./Slider";
 import Image from "next/image";
 import "../styles/card.css";
 import { useMovieContext } from "@/context/MovieContext";
+import { MovieResult } from "@/next-types";
 
 interface CardProps {
   movie: MovieResult;
   onCardClick?: (movie: MovieResult) => void;
+  className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ movie, onCardClick }) => {
+const Card: React.FC<CardProps> = ({ movie, onCardClick, className }) => {
   const { isLoading } = useMovieContext();
 
   return (
-    <div className={`card ${isLoading ? "loading" : ""}`} onClick={() => onCardClick && onCardClick(movie)}>
+    <div
+      className={`card ${isLoading ? "loading" : ""} ${className}`}
+      onClick={() => onCardClick && onCardClick(movie)}
+    >
       <div className="card-inner">
         {/* Front */}
         <div className="card-front">
@@ -26,7 +30,12 @@ const Card: React.FC<CardProps> = ({ movie, onCardClick }) => {
               height={500}
             />
           ) : (
-            <Image src={"/placeholder.png"} alt={movie.title} loading="lazy" fill />
+            <Image
+              src={"/placeholder.png"}
+              alt={movie.title}
+              loading="lazy"
+              fill
+            />
           )}
         </div>
 

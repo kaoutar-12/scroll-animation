@@ -25,9 +25,6 @@ const TypeSelector: React.FC<TypeSelectorProps> = ({
       <button onClick={() => onTypeChange("post")} className={buttonClass}>
         Post
       </button>
-      <button onClick={() => onTypeChange("carousel")} className={buttonClass}>
-        Carousel
-      </button>
     </div>
   );
 };

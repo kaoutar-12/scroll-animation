@@ -1,139 +1,28 @@
 "use client";
 
-import React, { useEffect, useRef, useCallback } from "react";
-import { gsap } from "gsap";
+import React, { useEffect, useRef } from "react";
 import "@/styles/slider.css";
-import Card from "./Card";
+import { MovieResult } from "@/next-types";
+import { useSliderAnimation } from "@/hooks/useSliderAnimation";
+import { useSliderInteractions } from "@/hooks/useSliderInteractions";
+import SliderColumn from "./SliderColumn";
 
-export type MovieResult = {
-  id: number;
-  title: string;
-  poster_path: string;
-  name: string;
-};
-
-export type MovieApiResponse = {
-  page: number;
-  results: MovieResult[];
-  total_pages: number;
-  total_results: number;
-};
-
-export const columns = 5;
-export const moviesPerColumn = 10;
-export const totalMovies = columns * moviesPerColumn;
-
-const scrollSpeeds = [1.3, 1, 1.4, 1, 1.2]; // Speed multipliers per column
-
-const Slider = ({
-  data,
-  onCardClick,
-}: {
+type SliderProps = {
   data: MovieResult[][];
   onCardClick: (movie: MovieResult) => void;
-}) => {
+  selectedMovies: number[];
+};
+
+const Slider: React.FC<SliderProps> = ({ data, onCardClick, selectedMovies }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLUListElement[]>([]);
 
-  const scrollYRef = useRef(0);
-  const yRef = useRef(0);
-  const oldScrollYRef = useRef(0);
-  const isDraggingRef = useRef(false);
-  const touchStartRef = useRef(0);
-  const itemHeightRef = useRef(0);
-  const wrapHeightRef = useRef(0);
-  const animationFrameId = useRef<number | null>(null);
-  const scrollSpeedRef = useRef(0);
-
-  const lerp = useCallback(
-    (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t,
-    []
-  );
-
-  const dispose = useCallback(
-    (menu: HTMLUListElement, scroll: number, index: number) => {
-      const items = menu.querySelectorAll<HTMLElement>(".small-part");
-      const itemHeight = itemHeightRef.current;
-      const wrapHeight = wrapHeightRef.current;
-      const speed = scrollSpeeds[index] || 1;
-
-      gsap.set(items, {
-        y: (i: number) => i * itemHeight + scroll * speed,
-        modifiers: {
-          y: (y: string) => {
-            const val = parseFloat(y);
-            const wrapped = gsap.utils.wrap(
-              -itemHeight,
-              wrapHeight - itemHeight,
-              val
-            );
-            return `${wrapped}px`;
-          },
-        },
-      });
-    },
-    []
-  );
-
-  const initGrid = useCallback(() => {
-    if (!containerRef.current || !menuRef.current.length) return;
-    const firstMenu = menuRef.current[0];
-    const items = firstMenu.querySelectorAll(".small-part");
-    if (!items.length) return;
-
-    const firstItem = items[0] as HTMLElement;
-    itemHeightRef.current = firstItem.clientHeight + 20; // Include gap
-    wrapHeightRef.current = items.length * itemHeightRef.current;
-
-    scrollYRef.current = 0;
-    yRef.current = 0;
-    oldScrollYRef.current = 0;
-
-    menuRef.current.forEach((menu, index) =>
-      dispose(menu, scrollYRef.current, index)
-    );
-  }, [dispose]);
-
-  const render = useCallback(() => {
-    animationFrameId.current = requestAnimationFrame(render);
-
-    yRef.current = lerp(yRef.current, scrollYRef.current, 0.1);
-
-    menuRef.current.forEach((menu, index) => {
-      dispose(menu, yRef.current, index);
-    });
-
-    scrollSpeedRef.current = yRef.current - oldScrollYRef.current;
-    oldScrollYRef.current = yRef.current;
-  }, [lerp, dispose]);
-
-  const handleWheel = useCallback((e: WheelEvent) => {
-    scrollYRef.current -= e.deltaY * 0.5;
-  }, []);
-
-  const handleTouchStart = useCallback((e: TouchEvent | MouseEvent) => {
-    isDraggingRef.current = true;
-    document.body.classList.add("dragging");
-    touchStartRef.current = "touches" in e ? e.touches[0].clientY : e.clientY;
-  }, []);
-
-  const handleTouchMove = useCallback((e: TouchEvent | MouseEvent) => {
-    if (!isDraggingRef.current) return;
-    e.preventDefault();
-    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-    const delta = clientY - touchStartRef.current;
-    scrollYRef.current += delta * 2.5;
-    touchStartRef.current = clientY;
-  }, []);
-
-  const handleTouchEnd = useCallback(() => {
-    if (!isDraggingRef.current) return;
-    isDraggingRef.current = false;
-    document.body.classList.remove("dragging");
-  }, []);
+  const { scrollYRef, initGrid, render, cleanup } = useSliderAnimation();
+  const { handleWheel, handleTouchStart, handleTouchMove, handleTouchEnd } =
+    useSliderInteractions(scrollYRef);
 
   useEffect(() => {
-    initGrid();
+    initGrid(menuRef.current);
   }, [data, initGrid]);
 
   useEffect(() => {
@@ -148,15 +37,13 @@ const Slider = ({
     window.addEventListener("mousemove", handleTouchMove);
     window.addEventListener("mouseup", handleTouchEnd);
 
-    animationFrameId.current = requestAnimationFrame(render);
+    render(menuRef.current);
 
-    const resizeObserver = new ResizeObserver(initGrid);
+    const resizeObserver = new ResizeObserver(() => initGrid(menuRef.current));
     resizeObserver.observe(container);
 
     return () => {
-      if (animationFrameId.current)
-        cancelAnimationFrame(animationFrameId.current);
-
+      cleanup();
       container.removeEventListener("wheel", handleWheel);
       container.removeEventListener("touchstart", handleTouchStart);
       container.removeEventListener("mousedown", handleTouchStart);
@@ -164,7 +51,6 @@ const Slider = ({
       window.removeEventListener("touchend", handleTouchEnd);
       window.removeEventListener("mousemove", handleTouchMove);
       window.removeEventListener("mouseup", handleTouchEnd);
-
       resizeObserver.disconnect();
     };
   }, [
@@ -174,36 +60,22 @@ const Slider = ({
     handleTouchEnd,
     render,
     initGrid,
+    cleanup,
   ]);
 
   return (
     <div className="container" ref={containerRef}>
       {data.map((column, colIndex) => (
-        <ul
+        <SliderColumn
           key={colIndex}
-          className="column"
-          ref={(el) => {
+          column={column}
+          colIndex={colIndex}
+          onCardClick={onCardClick}
+          selectedMovies={selectedMovies}
+          onRef={(el) => {
             if (el) menuRef.current[colIndex] = el;
           }}
-          style={{
-            transform: `translateY(${
-              [-100, -60, -150, -30, -200][colIndex]
-            }px)`,
-          }}
-        >
-          <div className="column-content">
-            {Array(5)
-              .fill(column)
-              .flat()
-              .map((movie, i) => (
-                <li key={`${movie.id}-${i}`} className="small-part">
-                  <div className="card-container">
-                    <Card movie={movie} onCardClick={onCardClick} />
-                  </div>
-                </li>
-              ))}
-          </div>
-        </ul>
+        />
       ))}
     </div>
   );
