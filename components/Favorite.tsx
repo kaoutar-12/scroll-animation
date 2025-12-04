@@ -48,6 +48,7 @@ const ExpandedCardsView: React.FC<BigCardsProps> = ({
   setIsValidate,
 }) => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const { setSelectedMovies } = useFavorites();
 
   // Toggle card selection (expands the card)
   const handleCardClick = (index: number) => {
@@ -58,6 +59,9 @@ const ExpandedCardsView: React.FC<BigCardsProps> = ({
   const handleDelete = (e: React.MouseEvent, id: number) => {
     e.stopPropagation(); // Prevent card click event
     onDelete(id);
+    setSelectedMovies((prev) => {
+      return prev.filter((movieId) => movieId !== id);
+    });
 
     // Deselect if the deleted card was selected
     if (selectedCard !== null && cards[selectedCard]?.id === id) {
@@ -65,10 +69,46 @@ const ExpandedCardsView: React.FC<BigCardsProps> = ({
     }
   };
 
+  const handleClick = (color: string) => {
+    const body = document.body;
+
+    // Remove old sections
+    const oldSections = document.querySelectorAll(".bg-section");
+    oldSections.forEach((sec) => sec.remove());
+
+    // Create 3 sections with stagger animation
+    for (let i = 1; i <= 3; i++) {
+      const section = document.createElement("div");
+      section.className = `bg-section bg-section-${i}`;
+      section.style.backgroundColor = color;
+      body.appendChild(section);
+
+      setTimeout(() => {
+        section.classList.add("active");
+      }, 10 + i * 50);
+    }
+
+    // After animation, set body bg and remove sections
+    setTimeout(() => {
+      body.style.backgroundColor = color;
+      //   const newSections = document.querySelectorAll(".bg-section");
+      //   newSections.forEach((sec) => sec.remove());
+      //   setRefresh((x) => !x);
+    }, 1100);
+  };
+
   return (
     <div className="list-wrapper-big">
       <div className="validate-container">
-        <button onClick={() => setIsValidate(true)} className="validate-button">
+        <button
+          onClick={() => {
+            setTimeout(() => {
+              handleClick("#ffeb7d");
+            }, 200);
+            setIsValidate(true);
+          }}
+          className="validate-button"
+        >
           Validate
         </button>
       </div>
@@ -143,9 +183,13 @@ const CompactCardsView: React.FC<CompactViewProps> = ({
   cards,
   onDelete,
 }) => {
+  const { setSelectedMovies } = useFavorites();
   const handleDelete = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     onDelete(id);
+    setSelectedMovies((prev) => {
+      return prev.filter((movieId) => movieId !== id);
+    });
   };
 
   return (
@@ -238,6 +282,14 @@ const Favorite: React.FC<FavoriteProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  if (isValidate) {
+    return (
+      <div className="">
+        <GeneratePost />
+      </div>
+    );
+  }
 
   return (
     <div className="fav" ref={favoriteRef}>

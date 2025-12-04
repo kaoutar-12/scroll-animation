@@ -145,23 +145,53 @@
   gap: 10px;
 }
 
-.button-bg-0 {
+.type-button-bg-0 {
+  background: #ffeb7d;
+  color: #870014;
+  border: 1px solid #870014 !important;
+}
+
+.type-button-bg-0:focus {
   background: #870014;
   color: #ffeb7d;
 }
 
-
-
-
-
-.button-bg-1 {
+.type-button-bg-1 {
+  background: #870014;
+  color: #ffeb7d;
+  border: 1px solid #ffeb7d !important;
+}
+.type-button-bg-1:focus {
   background: #ffeb7d;
   color: #870014;
 }
-.button-bg-2 {
+.type-button-bg-2 {
+  background: #5a003c;
+  color: #9cd1f5;
+  border: 1px solid #9cd1f5 !important;
+}
+
+.type-button-bg-2:focus {
   background: #9cd1f5;
   color: #5a003c;
 }
+
+.save-button-bg-0 {
+  background: #870014;
+  color: #ffeb7d;
+}
+
+.save-button-bg-1 {
+  background: #ffeb7d;
+  color: #870014;
+}
+.save-button-bg-2 {
+  background: #9cd1f5;
+  color: #5a003c;
+}
+
+
+
 
 .choises-container {
   width: 50%;

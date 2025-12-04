@@ -14,9 +14,9 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
 }) => {
   const getButtonClass = () => {
     const baseClass = "save-button";
-    if (selectedPost === 0) return `${baseClass} button-bg-0`;
-    if (selectedPost === 1) return `${baseClass} button-bg-1`;
-    return `${baseClass} button-bg-2`;
+    if (selectedPost === 0) return `${baseClass} save-button-bg-0`;
+    if (selectedPost === 1) return `${baseClass} save-button-bg-1`;
+    return `${baseClass} save-button-bg-2`;
   };
 
   return (

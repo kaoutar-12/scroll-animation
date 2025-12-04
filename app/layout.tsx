@@ -29,8 +29,7 @@ export default function RootLayout({
         <FavoritesProvider>
           <MovieProvider>
             <div className="layout-wrapper">
-              <div className="edge-blur left" />
-              <div className="edge-blur right" />
+             
               <div className="layout-content">{children}</div>
             </div>
           </MovieProvider>

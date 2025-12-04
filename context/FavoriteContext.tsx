@@ -14,6 +14,8 @@ type FavoritesContextType = {
   addMovieToFavorites: (movie: MovieResult) => void;
   removeMovie: (id: number) => void;
   clearFavorites: () => void;
+  selectedMovies: number[];
+  setSelectedMovies: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(
@@ -24,6 +26,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [cards, setCards] = useState<(MovieResult | null)[]>(
     Array(10).fill(null)
   );
+  const [selectedMovies, setSelectedMovies] = useState<number[]>([]);
 
   const addMovieToFavorites = useCallback((movie: MovieResult) => {
     setCards((prev) => {
@@ -70,6 +73,8 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
         addMovieToFavorites,
         removeMovie,
         clearFavorites,
+        selectedMovies,
+        setSelectedMovies,
       }}
     >
       {children}

@@ -9,11 +9,10 @@ import SearchPage from "@/components/Search";
 import { MovieResult } from "@/next-types";
 
 export default function Home() {
-  const { addMovieToFavorites, cards, removeMovie } = useFavorites();
+  const { addMovieToFavorites, cards, removeMovie, selectedMovies, setSelectedMovies } = useFavorites();
   const { data, getData } = useMovieContext();
   const [isValidate, setIsValidate] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [selectedMovies, setSelectedMovies] = useState<number[]>([]);
   const handleCardClick = (movie: MovieResult) => {
     setSelectedMovies((prev) => {
       if (prev.includes(movie.id)) {

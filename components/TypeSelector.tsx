@@ -10,9 +10,9 @@ const TypeSelector: React.FC<TypeSelectorProps> = ({
   onTypeChange,
 }) => {
   const getButtonClass = () => {
-    if (selectedPost === 0) return "button-bg-0";
-    if (selectedPost === 1) return "button-bg-1";
-    return "button-bg-2";
+    if (selectedPost === 0) return "type-button-bg-0";
+    if (selectedPost === 1) return "type-button-bg-1";
+    return "type-button-bg-2";
   };
 
   const buttonClass = getButtonClass();

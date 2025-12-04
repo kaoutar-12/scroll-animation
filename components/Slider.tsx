@@ -13,7 +13,11 @@ type SliderProps = {
   selectedMovies: number[];
 };
 
-const Slider: React.FC<SliderProps> = ({ data, onCardClick, selectedMovies }) => {
+const Slider: React.FC<SliderProps> = ({
+  data,
+  onCardClick,
+  selectedMovies,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLUListElement[]>([]);
 
@@ -65,6 +69,8 @@ const Slider: React.FC<SliderProps> = ({ data, onCardClick, selectedMovies }) =>
 
   return (
     <div className="container" ref={containerRef}>
+      <div className="edge-blur left" />
+      <div className="edge-blur right" />
       {data.map((column, colIndex) => (
         <SliderColumn
           key={colIndex}
