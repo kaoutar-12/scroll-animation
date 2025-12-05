@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useFavorites } from "@/context/FavoriteContext";
 import "@/styles/generate-post.css";
 import { toPng } from "html-to-image";
@@ -7,15 +7,14 @@ import TypeSelector from "@/components/TypeSelector";
 import StoryLayout from "@/components/StoryLayout";
 import PostLayout from "@/components/PostLayout";
 import DownloadButton from "@/components/DownloadButton";
-import AnimatedBackground from "./AnimatedBackground";
 import "@/styles/AnimatedBackground.css";
+import { AnimatePresence, motion } from "motion/react";
 
 const Page = () => {
   const { cards } = useFavorites();
   const [selectedPost, setSelectedPost] = React.useState<number>(0);
   const [typePost, setTypePost] = React.useState<string>("story");
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
-  const [_, setRefresh] = React.useState<boolean>(false);
 
   // Refs for the downloadable containers
   const storyRefs = useRef<(HTMLDivElement | null)[]>([null, null, null]);
@@ -100,37 +99,53 @@ const Page = () => {
     // Trigger background animation based on selected post
     const colors = ["#ffeb7d", "#870014", "#5a003c"];
     handleClick(colors[index] || "#ffeb7d");
-  }
+  };
 
   return (
-    <div className={`generate-post-page `}>
-      {/* <AnimatedBackground /> */}
-      <TypeSelector selectedPost={selectedPost} onTypeChange={setTypePost} />
-
-      {typePost === "story" && (
-        <StoryLayout
-          cards={cards}
+    <AnimatePresence>
+      <motion.div
+        className={`generate-post-page `}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0 }}
+        transition={{
+          duration: 2,
+          delay: 0.8,
+          ease: [0, 0.71, 0.2, 1.01],
+        }}
+      >
+        {/* <AnimatedBackground /> */}
+        <TypeSelector
           selectedPost={selectedPost}
-          onSelectPost={handleSelectPost}
-          refs={storyRefs}
+          onTypeChange={setTypePost}
+          typePost={typePost}
         />
-      )}
 
-      {typePost === "post" && (
-        <PostLayout
-          cards={cards}
+        {typePost === "story" && (
+          <StoryLayout
+            cards={cards}
+            selectedPost={selectedPost}
+            onSelectPost={handleSelectPost}
+            refs={storyRefs}
+          />
+        )}
+
+        {typePost === "post" && (
+          <PostLayout
+            cards={cards}
+            selectedPost={selectedPost}
+            onSelectPost={handleSelectPost}
+            refs={postRefs}
+          />
+        )}
+
+        <DownloadButton
           selectedPost={selectedPost}
-          onSelectPost={setSelectedPost}
-          refs={postRefs}
+          onDownload={handleDownload}
+          isDownloading={isDownloading}
         />
-      )}
-
-      <DownloadButton
-        selectedPost={selectedPost}
-        onDownload={handleDownload}
-        isDownloading={isDownloading}
-      />
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
