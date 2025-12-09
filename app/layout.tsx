@@ -1,10 +1,7 @@
 "use client";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import { usePathname } from "next/navigation";
-import Favorite from "@/components/Favorite";
-import { FavoritesProvider, useFavorites } from "@/context/FavoriteContext";
+import { FavoritesProvider } from "@/context/FavoriteContext";
 import { MovieProvider } from "@/context/MovieContext";
 
 const geistSans = localFont({

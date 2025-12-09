@@ -123,7 +123,7 @@ const Page = () => {
 
         {typePost === "story" && (
           <StoryLayout
-            cards={cards}
+            cards={cards.filter((card): card is NonNullable<typeof card> => card !== null)}
             selectedPost={selectedPost}
             onSelectPost={handleSelectPost}
             refs={storyRefs}
@@ -132,7 +132,7 @@ const Page = () => {
 
         {typePost === "post" && (
           <PostLayout
-            cards={cards}
+            cards={cards.filter((card): card is NonNullable<typeof card> => card !== null)}
             selectedPost={selectedPost}
             onSelectPost={handleSelectPost}
             refs={postRefs}

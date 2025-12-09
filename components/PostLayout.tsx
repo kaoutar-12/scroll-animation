@@ -28,7 +28,7 @@ const PostLayout: React.FC<PostLayoutProps> = ({
     refIndex: number
   ) => (
     <div
-      ref={(el) => (refs.current[refIndex] = el)}
+      ref={(el) => { refs.current[refIndex] = el; }}
       className={`${containerClass} ${selectedPost === index ? "selected" : ""}`}
       onClick={() => onSelectPost(index)}
     >

@@ -6,7 +6,6 @@ import Card from "./Card";
 import { MovieResult } from "@/next-types";
 import { FaCheck } from "react-icons/fa";
 
-
 type SliderColumnProps = {
   column: MovieResult[];
   colIndex: number;
@@ -39,8 +38,10 @@ const SliderColumn: React.FC<SliderColumnProps> = ({
           .map((movie, i) => (
             <li key={`${movie.id}-${i}`} className="small-part">
               <div
-                className={`card-container movie-card ${
-                  selectedMovies.includes(movie.id) ? "selected-card" : ""
+                className={`movie-card ${
+                  selectedMovies.includes(movie.id)
+                    ? "selected-card animate-in"
+                    : "animate-out"
                 }`}
               >
                 {selectedMovies.includes(movie.id) && (

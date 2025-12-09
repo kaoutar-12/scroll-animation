@@ -5,10 +5,10 @@ import axios from "axios";
 import Image from "next/image";
 import "@/styles/search.css";
 import { IoSearchSharp } from "react-icons/io5";
-import { MovieResult } from "@/components/Slider";
 import { useFavorites } from "@/context/FavoriteContext";
 import { IoIosArrowBack } from "react-icons/io";
-
+import { FaCheck } from "react-icons/fa";
+import { MovieResult } from "@/next-types";
 
 export type SearchResult = {
   id: number;
@@ -25,20 +25,25 @@ const TOTAL_PAGES_TO_FETCH = 5;
 const LOOP_COUNT = 20;
 
 const SearchPage: React.FC<SearchPageProps> = ({ setIsSearchOpen }) => {
-  const { addMovieToFavorites } = useFavorites();
+  const {
+    addMovieToFavorites,
+    removeMovie,
+    selectedMovies,
+    setSelectedMovies,
+  } = useFavorites();
+
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [initialMovies, setInitialMovies] = useState<SearchResult[]>([]);
 
+  // Fetch trending movies initially
   useEffect(() => {
     const fetchInitialMovies = async () => {
       try {
         const responses = await Promise.all(
           Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
             axios.get("https://api.themoviedb.org/3/trending/all/day", {
-              params: {
-                page: i + 1,
-              },
+              params: { page: i + 1 },
               headers: {
                 Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
               },
@@ -54,6 +59,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ setIsSearchOpen }) => {
     fetchInitialMovies();
   }, []);
 
+  // Fetch search results
   useEffect(() => {
     const delay = setTimeout(() => {
       if (query.trim()) {
@@ -70,11 +76,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ setIsSearchOpen }) => {
       const responses = await Promise.all(
         Array.from({ length: TOTAL_PAGES_TO_FETCH }, (_, i) =>
           axios.get("https://api.themoviedb.org/3/search/multi", {
-            params: {
-              query: searchTerm,
-              page: i + 1,
-              include_adult: false,
-            },
+            params: { query: searchTerm, page: i + 1, include_adult: false },
             headers: {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
             },
@@ -88,6 +90,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ setIsSearchOpen }) => {
     }
   };
 
+  // Handle click: toggle favorite + selection
   const handleCardClick = (movie: SearchResult) => {
     const movieResult: MovieResult = {
       id: movie.id,
@@ -95,7 +98,14 @@ const SearchPage: React.FC<SearchPageProps> = ({ setIsSearchOpen }) => {
       poster_path: movie.poster_path,
       name: movie.name || "",
     };
-    addMovieToFavorites(movieResult);
+
+    if (selectedMovies.includes(movie.id)) {
+      removeMovie(movie.id);
+      setSelectedMovies((prev) => prev.filter((id) => id !== movie.id));
+    } else {
+      addMovieToFavorites(movieResult);
+      setSelectedMovies((prev) => [...prev, movie.id]);
+    }
   };
 
   const isSearching = query.trim().length > 0;
@@ -129,9 +139,19 @@ const SearchPage: React.FC<SearchPageProps> = ({ setIsSearchOpen }) => {
           moviesToDisplay.map((movie, index) => (
             <div
               key={`${movie.id}-${index}`}
-              className="movie-card-search"
+              className={`movie-card-search ${
+                selectedMovies.includes(movie.id)
+                  ? "selected-card animate-in"
+                  : "animate-out"
+              }`}
               onClick={() => handleCardClick(movie)}
             >
+              {selectedMovies.includes(movie.id) && (
+                <div className="checkmark">
+                  <FaCheck />
+                </div>
+              )}
+
               <Image
                 src={
                   movie.poster_path

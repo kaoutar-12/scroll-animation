@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from "motion/react";
 import React from "react";
 import { AiOutlineDownload } from "react-icons/ai";
@@ -44,7 +45,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         disabled={isDownloading}
         initial="initial"
         whileHover="hover"
-        transition={{ duration: 0.35 }}
+        transition={{ duration: 0.5 }}
         style={{ position: "relative", overflow: "hidden" }} // needed
       >
         {/* OLD TEXT */}
@@ -56,7 +57,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           style={{
             position: "absolute",
             left: "50px",
-            top: "24px",
+            top: "22px",
             transform: "translate(-50%, -50%)",
             whiteSpace: "nowrap",
             fontWeight: 600,
@@ -74,7 +75,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           style={{
             position: "absolute",
             left: "50px",
-            top: "24px",
+            top: "22px",
             transform: "translate(-50%, -50%)",
             whiteSpace: "nowrap",
             fontWeight: 600,

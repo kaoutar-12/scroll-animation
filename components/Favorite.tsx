@@ -18,7 +18,7 @@ export interface MovieResult {
 }
 
 interface BigCardsProps {
-  cards: MovieResult[];
+  cards: (MovieResult | null)[];
   onDelete: (id: number) => void;
   isValidate: boolean;
   setIsValidate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,7 +26,7 @@ interface BigCardsProps {
 
 interface CompactViewProps {
   toggleExpand: () => void;
-  cards: MovieResult[];
+  cards: (MovieResult | null)[];
   onDelete: (id: number) => void;
 }
 

@@ -51,15 +51,40 @@
   }
 }
 
+.movie-card {
+  position: relative;
+  transition: transform .3s ease;
+}
 
+/* SELECTED */
 .movie-card.selected-card {
   border: 6px solid #9cd1f5;
   border-radius: 22px;
 }
-.movie-card {
-  position: relative;
+
+/* Animate in */
+.movie-card.animate-in {
+  animation: cardPop .35s ease forwards;
 }
 
+/* Animate out */
+.movie-card.animate-out {
+  animation: cardShrink .35s ease forwards;
+}
+
+@keyframes cardPop {
+  0% { transform: scale(.95); }
+  70% { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}
+
+@keyframes cardShrink {
+  0% { transform: scale(1.05); }
+  70% { transform: scale(.99); }
+  100% { transform: scale(1); }
+}
+
+/* Checkmark */
 .checkmark {
   position: absolute;
   bottom: 10px;
@@ -74,4 +99,11 @@
   align-items: center;
   z-index: 20;
   font-size: 30px;
+  animation: checkmarkPop .3s ease;
+}
+
+@keyframes checkmarkPop {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
