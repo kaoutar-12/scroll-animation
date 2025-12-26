@@ -31,6 +31,9 @@
   justify-content: center;
   position: relative; /* allows absolute positioning of go-back */
 }
+.back-link{
+  display: flex;
+}
 
 .go-back {
   width: 80px;
@@ -44,7 +47,7 @@
   left: 200px; /* adjust this value to move it more or less to the right */
 }
 .back-icon {
-  font-size: 30px;
+  font-size: 35px;
   color: #42002c; /* Dark purple, matching the border */
 }
 

@@ -27,7 +27,6 @@
   border-radius: 15px;
   background: linear-gradient(145deg, #90c4e8, #a0dcff);
   border: 2px solid rgba(90, 0, 60, 0.3);
-  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,7 +48,6 @@
 .favorite.expanded {
   width: 1600px;
   height: 500px;
-
 }
 
 /* ============================================
@@ -61,7 +59,6 @@
   border: none;
   border-top: 5px solid rgba(90, 0, 60, 1);
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.4s ease;
   margin-bottom: 25px;
 }
@@ -71,7 +68,6 @@
   border: none;
   border-top: 5px solid rgba(90, 0, 60, 1);
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .text {
@@ -79,7 +75,6 @@
   font-weight: 600;
   font-size: 24px;
   color: #a0dcff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   letter-spacing: 1px;
 }
 
@@ -132,7 +127,6 @@
   position: relative;
   perspective: 1000px;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
 }
 
@@ -168,7 +162,6 @@
   justify-content: center;
   align-items: center;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
 }
 
@@ -235,7 +228,6 @@
   height: 100px;
   background: rgba(255, 255, 255, 0.2);
   border: 2px dashed rgba(90, 0, 60, 0.5);
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -262,7 +254,6 @@
   color: white;
   border: none;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -287,7 +278,6 @@
   color: white;
   border: none;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -347,7 +337,6 @@
   background: rgba(255, 255, 255, 0.3);
   border: solid 2px rgba(90, 0, 60, 1);
   border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -394,7 +383,6 @@
   color: #a0dcff;
   border: none;
   border-radius: 99px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   font-family: "Bebas neue", sans-serif;
   font-size: 24px;
   cursor: pointer;
@@ -403,7 +391,6 @@
 
 .validate-button:hover {
   background: linear-gradient(to bottom, #6a004c, #4a0036);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   transform: translateY(-3px);
 }
 
@@ -419,7 +406,6 @@
   height: 15px;
   background-color: rgba(90, 0, 60, 1);
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -433,53 +419,33 @@
    RESPONSIVE DESIGN
    ============================================ */
 
-@media (max-width: 950px) {
-  .favorite.expanded {
-    width: 95vw;
-    max-width: 800px;
-    height: 450px;
+@media (min-width: 560px) and (max-width: 768px) {
+  .fav {
+    width: 550px;
   }
-
-  .list-big {
-    height: 200px;
-  }
-}
-
-@media (max-width: 650px) {
   .favorite {
-    width: 90vw;
-    max-width: 500px;
+    width: 100%;
+    height: 130px;
   }
-
-  .favorite.expanded {
-    height: 400px;
+  .list-wrapper {
+    width: 100%;
   }
-
   .list-fav {
-    width: 90vw;
-    max-width: 450px;
+    width: 80%;
   }
-
   .liked {
     width: 60px;
-    height: 90px;
+    height: 80px;
   }
-
-  .text {
-    font-size: 18px;
+  .liked.empty-small {
+    width: 60px;
+    height: 80px;
+  }
+  .expand {
+    display: none;
   }
 }
 
-.validation-container {
-  position: fixed;
-  top: 0;
-  left: 1;
-  transform: translateX(-100%);
-  transform: translateY(-100%);
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+@media (max-width: 559px) {
 
+}

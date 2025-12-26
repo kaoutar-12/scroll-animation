@@ -23,11 +23,12 @@ const Card: React.FC<CardProps> = ({ movie, onCardClick, className }) => {
         <div className="card-front">
           {movie.poster_path ? (
             <Image
-              src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
               loading="lazy"
-              width={350}
-              height={500}
+              fill
+              sizes="(max-width: 480px) 26vw, (max-width: 768px) 28vw, (max-width: 1024px) 30vw, 18vw"
+              style={{ objectFit: "cover" }}
             />
           ) : (
             <Image
@@ -35,6 +36,7 @@ const Card: React.FC<CardProps> = ({ movie, onCardClick, className }) => {
               alt={movie.title}
               loading="lazy"
               fill
+              style={{ objectFit: "cover" }}
             />
           )}
         </div>
@@ -42,7 +44,7 @@ const Card: React.FC<CardProps> = ({ movie, onCardClick, className }) => {
         {/* Back */}
         <div className="card-back">
           <Image
-            src={"/card-back.png"} // replace with your back image
+            src={"/card-back.png"}
             alt="back"
             fill
             style={{ objectFit: "cover" }}

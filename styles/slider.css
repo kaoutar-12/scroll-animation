@@ -3,8 +3,22 @@
   grid-template-columns: repeat(5, 1fr);
   width: 100vw;
   overflow: hidden;
-  gap: 80px;
+  gap: min(80px, 5vw);
+}
 
+/* Tablet and smaller screens - 3 columns */
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: min(40px, 3vw);
+  }
+}
+
+/* Mobile screens - adjust gap */
+@media (max-width: 768px) {
+  .container {
+    gap: min(20px, 2vw);
+  }
 }
 
 .column {
@@ -13,7 +27,14 @@
   width: 100%;
   will-change: transform;
   padding: 0px;
+}
 
+/* Hide columns 4 and 5 on smaller screens */
+@media (max-width: 1024px) {
+  .column:nth-child(4),
+  .column:nth-child(5) {
+    display: none;
+  }
 }
 
 .small-part {
@@ -28,12 +49,34 @@
 .card-container {
   display: flex;
   flex-direction: column;
-  width: 350px;
-  height: 500px;
+  width: min(350px, 18vw);
+  height: min(500px, 25.7vw);
   border-radius: 16px;
   overflow: hidden;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   padding-right: 0;
+}
+
+/* Responsive card sizes */
+@media (max-width: 1024px) {
+  .card-container {
+    width: min(280px, 30vw);
+    height: min(400px, 43vw);
+  }
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    width: min(240px, 28vw);
+    height: min(340px, 40vw);
+  }
+}
+
+@media (max-width: 480px) {
+  .card-container {
+    width: 26vw;
+    height: 37vw;
+  }
 }
 
 .card-container:hover {
