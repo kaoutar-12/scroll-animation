@@ -193,7 +193,7 @@ const CompactCardsView: React.FC<CompactViewProps> = ({
   };
 
   return (
-    <div className="list-wrapper">
+    <div className="list-wrapper" onClick={toggleExpand}>
       {/* Small cards row */}
       <div className="list-fav">
         {cards.map((card, index) =>
